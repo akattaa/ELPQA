@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Reply to an SMS Message from the Salesforce1 mobile app.</description>
+    <height>250</height>
+    <icon>SimpleSMS_Icon</icon>
+    <label>Reply</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <page>Action_ReplyMessage</page>
+    <type>VisualforcePage</type>
+    <width>-100</width>
+</QuickAction>

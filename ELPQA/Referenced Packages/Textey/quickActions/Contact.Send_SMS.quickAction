@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuickAction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <height>50</height>
+    <icon>SimpleSMS_Icon</icon>
+    <label>Send SMS</label>
+    <optionsCreateFeedItem>false</optionsCreateFeedItem>
+    <page>Action_SendSmsContact</page>
+    <type>VisualforcePage</type>
+    <width>-100</width>
+</QuickAction>

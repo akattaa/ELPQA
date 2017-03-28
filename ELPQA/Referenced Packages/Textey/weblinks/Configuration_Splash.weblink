@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPageWebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <availability>online</availability>
+    <description>Splash page displayed on the Configuration tab.</description>
+    <displayType>link</displayType>
+    <linkType>page</linkType>
+    <masterLabel>Configuration Splash</masterLabel>
+    <openType>replace</openType>
+    <page>ConfigurationSplash</page>
+    <protected>true</protected>
+</CustomPageWebLink>

@@ -1,0 +1,118 @@
+<apex:page controller="silverpop.EngageTemplateController"
+    showHeader="false" cache="false" 
+    tabStyle="SP_Select_Template__tab">
+      
+    <apex:includeScript value="{!$Resource.silverpop__EngageJS}"/>
+    <apex:stylesheet value="{!$Resource.silverpop__EngageCSS}" />
+
+    <script type='text/javascript'>
+        window.$Label = window.$Label || {};
+        $Label.CancelMsg = '{!JSENCODE($Label.lbl_cancel_msg)}';
+                
+        var previousOnload = window.onload;        
+        window.onload = function() { 
+        if (previousOnload) { 
+            previousOnload();
+        }  
+            //bind the cookies to the controller
+            bindLoadValues(
+                getCookie('sp_esessionid'), 
+                getCookie('sp_subject'),
+                getCookie('sp_template')
+            );
+        }
+        
+        function nextPage() {
+            buildPageReference();
+            disableNextButtons();
+            
+            return false;
+        }
+
+        function disableNextButtons() {
+            disableElements(document.querySelectorAll('.nextButtons'));
+        }
+        
+        function disableElements(elements) {
+            for(var x = 0; x < elements.length; x++) {
+                elements[x].disabled = true;
+                elements[x].style.color = "#CCCCCC";
+            }
+        }
+        
+        function enableNextButtons() {
+            enableElements(document.querySelectorAll('.nextButtons'));
+        }
+        
+        function enableElements(elements) {
+            for(var x = 0; x < elements.length; x++) {
+                elements[x].disabled = false;
+                elements[x].style.color = "#000000";
+            }
+        }
+    </script>
+    <apex:form id="theForm">
+        <apex:actionFunction name="bindLoadValues" action="{!bindLoadValues}" rerender="pbMainBlock"  status="templateStatus">
+            <apex:param name="silverpopSessionId" value="" assignto="{!silverpopSessionId}" />
+            <apex:param name="selectedSubject" value="" assignto="{!selectedSubject}" /> 
+            <apex:param name="selectedTemplateId" value="" assignto="{!selectedTemplateId}" />
+        </apex:actionFunction>
+        <apex:actionStatus id="templateStatus">
+            <apex:facet name="start">
+                <div class="loadingText">
+                    {!$Label.lbl_retrieve_templates}
+                </div>
+                <div class="loadingText">
+                    <img src="{!$Resource.LoadingImg}" />
+                </div>
+            </apex:facet>
+            <apex:facet name="stop">
+                <apex:pageBlock id="pbMainBlock" title="{!$Label.lbl_step1}" rendered="{!NOT isError}" HelpTitle="{!$Label.lbl_whatis_template}" HelpUrl="/apex/SP_TemplateHelp">
+                    <apex:pageBlockSection columns="2" id="pbsTemplates" collapsible="false">
+                        <apex:facet name="header">
+                            <apex:panelGrid columns="2" styleClass="pageBlockHeading, detailList" columnClasses="pageBlockHeadingColumn1, pageBlockHeadingColumn2">
+                                <apex:outputText id="selectFolderHeading" rendered="{!shouldDisplayFolderSelectList}">{!$Label.lbl_select_mailing_folder}</apex:outputText>
+                                <apex:outputText id="selectTemplateHeading">{!$Label.lbl_select_mailing_template}</apex:outputText>
+                            </apex:panelGrid>
+                        </apex:facet>
+                        <apex:pageBlockSectionItem id="folderListSection" rendered="{!shouldDisplayFolderSelectList}">
+                            <apex:outputPanel id="folderPanel" layout="block" style="padding-left: 0px !important; width: 300px;">
+                                <apex:selectList id="folderSelectList" value="{!selectedFolderId}" size="1" style="max-width: 400px; min-width: 250px;">
+                                    <apex:selectOptions value="{!folderSelectOptions}"/>
+                                    <apex:actionSupport event="onchange" rerender="templateList" onsubmit="disableNextButtons();" 
+                                            oncomplete="enableNextButtons(); refreshTemplatePreview()" />
+                                    <apex:actionFunction name="refreshTemplatePreview" rerender="templatePreview,buttons" action="{!clearSelectedSubject}" />
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="pbsiTemplateList" dataTitle="{!$Label.lbl_req_personalmessage}">             
+                            <apex:outputPanel id="templateList" layout="block" style="width: 300px;">
+                                <apex:selectList id="slTemplates" value="{!selectedTemplateId}" size="1" style="max-width: 400px; min-width: 250px;">
+                                    <apex:selectOptions value="{!templateSelectOptions}"/>
+                                    <apex:actionSupport event="onchange" rerender="templatePreview,buttons" action="{!clearSelectedSubject}"
+                                             onsubmit="disableNextButtons();" oncomplete="enableNextButtons();" />
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                     <apex:pageBlockSection columns="1" id="pbsData">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!$Label.lbl_req_personalmessage}" for="slTemplates"/> 
+                        </apex:pageBlockSectionItem>    
+                        <apex:pageBlockSectionItem id="pbsiTemplate">
+                            <apex:outputPanel id="templatePreview" title="{!$Label.lbl_preview}" style="margin:3px; border: black solid 1px;" layout="block">
+                                <apex:iframe src="/apex/SP_TemplatePreview?t={!selectedTemplateId}" scrolling="true" id="theIframe" width="100%" height="460">
+                                </apex:iframe>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockButtons id="buttons">
+                        <apex:commandButton value="{!$Label.lbl_cancel}" onclick="return confirmCancel()" immediate="true"/> 
+                        <input type="button" value="{!$Label.lbl_next}" class="btn nextButtons" onclick="nextPage();" />
+                        <apex:actionFunction name="buildPageReference" action="{!next}" />
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:form>
+</apex:page>

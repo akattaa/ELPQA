@@ -1,0 +1,56 @@
+<apex:page controller="silverpop.EngageSendEmailController"
+	showHeader="false"
+ 	tabStyle="SP_Select_Template__tab">
+ 	<apex:includeScript value="{!$Resource.silverpop__EngageJS}"/>
+ 	<apex:stylesheet value="{!$Resource.silverpop__EngageCSS}" />
+ 	<script type='text/javascript'>
+		var previousOnload = window.onload;        
+		window.onload = function() { 
+	  		if (previousOnload) { 
+	      		previousOnload();
+	  		}  
+	  			//bind the cookies to the controller
+			bindLoadValues();
+		}
+   	</script>
+	<apex:form id="form">
+	 	<apex:actionFunction name="bindLoadValues" action="{!bindLoadValuesSend}" rerender="pbMainBlock,messages" status="myStatus">
+	        <apex:param name="serverURL" assignTo="{!apiServerURL}" value="{!$Api.Partner_Server_URL_180}" />
+	    </apex:actionFunction>
+		<apex:actionStatus id="myStatus">
+			<apex:facet name="start">
+				<div class="loadingText">
+					{!$Label.lbl_processing_message}
+				</div>
+				<div class="loadingText">
+					<img src="{!$Resource.LoadingImg}" />
+				</div>
+			</apex:facet>
+			<apex:facet name="stop">
+				<apex:pageBlock id="pbMainBlock" title="{!$Label.lbl_step4}">
+                    <apex:pageBlockSection rendered="{!NOT doMessagesExist}" columns="1">
+                    <div class="message infoM3">
+                        <table border="0" cellpadding="0" cellspacing="0" class="messageTable" style="padding:0px;margin:0px;">
+						<tbody>
+						    <tr valign="top">
+						        <td><img alt="INFO" class="msgIcon" src="/s.gif" title="INFO" /></td>
+						        <td class="messageCell">
+						            <div class="messageText">
+                                        {!$Label.lbl_conn_timeout}
+                                        <br />
+						            </div>
+						        </td>
+						    </tr>
+						</tbody>
+						</table>
+                    </div>
+                    </apex:pageBlockSection>
+                    <apex:pageMessages id="messages" />
+                    <apex:pageBlockButtons id="pbbButtons" location="bottom">
+                        <apex:commandButton value="{!$Label.lbl_ok}" onclick="closeMe();" immediate="true" /> 
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:form>
+</apex:page>

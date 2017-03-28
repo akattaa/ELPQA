@@ -1,0 +1,116 @@
+<!--
+ * FLYWHEEL ENTERPRISES CONFIDENTIAL
+ * __________________________________
+ * 
+ *  [2009] - [2014] Flywheel Enterprises, LLC
+ *  All Rights Reserved.
+ * 
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Flywheel Enterprises, LLC and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Flywheel Enterprises, LLC
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Flywheel Enterprises, LLC.
+ *
+ * 
+ * Visualforce page to create and edit SMS Templates.
+ *
+-->
+<apex:page standardController="simplesms__SMS_Template__c" extensions="simplesms.NewTemplateExtension">
+  <apex:form >
+      <apex:pageBlock title="New SMS Template" id="page" >
+          
+          <apex:pageBlockSection columns="1" id="setup">
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Template Name" />
+                  <apex:inputField value="{!template.Name}" required="true"/>
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Active" />
+                  <apex:inputField value="{!template.simplesms__IsActive__c}" />
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem rendered="{!!isObjectSet}" >
+                  <apex:outputLabel value="Select Object" />
+                  <apex:selectList value="{!selObject}" size="1">
+                      <apex:selectOptions value="{!allObjects}" /> 
+                  </apex:selectList>
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem rendered="{!!isObjectSet}" >
+                  <apex:outputLabel value="" />
+                  <apex:commandButton value="Next" action="{!setObject}" rerender="page" />
+              </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+          
+          <apex:pageBlockSection title="Object Info" columns="1" rendered="{!isObjectSet}" id="object-info">
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Object" />
+                  <apex:outputText value="{!selObject}" />
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem rendered="{!template.simplesms__Code__c != NULL}">
+                  <apex:outputLabel value="Template Code" />
+                  <apex:outputLabel value="{!template.simplesms__Code__c}" />
+              </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+
+          <apex:pageBlockSection title="Build Template" columns="1" rendered="{!isObjectSet}" id="fields">
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Select Field" />
+                  <apex:selectList value="{!selField}" size="1" onchange="formatField( '\{\!' + this.value + '\}' );">
+                      <apex:selectOptions value="{!objectFields}" />
+                  </apex:selectList>
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Copy Merge Field Value" />
+                  <input type="text" id="formattedFieldName"></input>
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Message Body" />
+                  <apex:inputTextArea cols="100" rows="8" value="{!template.simplesms__Body__c}" required="true" />
+              </apex:pageBlockSectionItem>  
+          </apex:pageBlockSection>
+
+          <apex:pageBlockSection title="Workflow Rule Options" columns="1" rendered="{!isObjectSet}" id="workflow-options"> 
+              <apex:pageBlockSectionItem >
+                <apex:outputText value="The fields below are only necessary if you use this template in a Workflow Task" />
+              </apex:pageBlockSectionItem>
+              
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Phone Field to Send to" />
+                  <apex:selectList value="{!template.simplesms__Phone_Field__c}" size="1">
+                      <apex:selectOptions value="{!objectPhoneFields}" />
+                  </apex:selectList>
+              </apex:pageBlockSectionItem>
+
+              <apex:pageBlockSectionItem >
+                  <apex:outputLabel value="Phone Number to Send From" />
+                  <apex:inputField value="{!template.Phone_Number__c }"/>
+              </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>
+
+          <apex:pageBlockButtons location="bottom" rendered="{!selObject != NULL}" >
+              <apex:commandButton value="Save" action="{!saveWithCode}" />
+              <apex:commandButton value="Cancel" action="{!cancel}" />
+          </apex:pageBlockButtons>          
+      </apex:pageBlock>
+      
+  </apex:form>
+
+  <script type="text/javascript">
+
+      function formatField( n )
+      {
+           el = document.getElementById( "formattedFieldName" );
+           el.value = n;
+      }
+
+  </script>
+</apex:page>

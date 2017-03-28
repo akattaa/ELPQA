@@ -1,0 +1,62 @@
+<apex:page >
+<style type="text/css" media="screen">
+ 	div.GettingStarted {
+ 		background-color: #FFFFFF;
+		color: #000000;
+		font-family: "Calibri", Arial;
+		font-size: 12px;
+ 	}
+	div.GettingStarted a {
+		color: #0000FF;
+	}
+	div.GettingStarted a:visited {
+		color: #800080;
+	}
+	div.GettingStarted a:active {
+		color: #FF0000;
+	}
+	div.GettingStarted p.footer {
+		font-size: 10px;
+		text-align: center;
+	}
+	div.GettingStarted img {
+		border: none;
+	}
+</style>
+<div class="GettingStarted">
+<font size="4" face="Calibri, arial" color="#000080">{!$Label.lbl_thankyou}</font>
+
+
+ <p>
+{!$Label.lbl_supportportal} (<a href="http://portal.silverpop.com" target="_blank">http://portal.silverpop.com</a>). </p>
+
+<p>
+<apex:image url="{!URLFOR($Resource.silverpop__GettingStartedImages, 'SP_Support_Portal.png')}" width="410" height="450" alt="{!$Label.lbl_support_portal}" />
+</p>
+
+<apex:outputText escape="false" value="{!$Label.lbl_gettingstarted}">
+       <apex:param value="{!$Label.lbl_knowledge_link}" />
+</apex:outputText>
+
+<p>
+<apex:image url="{!URLFOR($Resource.silverpop__GettingStartedImages, 'CRM_Portal_Solution1.png')}" width="574" height="267" alt="{!$Label.lbl_crm_solutions}" />
+</p>
+
+
+<p>{!$Label.lbl_help1}</p>
+
+<p>
+<apex:image url="{!URLFOR($Resource.silverpop__GettingStartedImages, 'CRM-HelpMenu.png')}" width="415" height="139" alt="{!$Label.lbl_online_help}" />
+</p>
+
+<p>{!$Label.lbl_help2}</p>
+
+<p>
+<apex:image url="{!URLFOR($Resource.silverpop__GettingStartedImages, 'CRM_OnlineHelp1.png')}" width="235" height="206" alt="{!$Label.lbl_crm_directory}" />
+</p>
+
+<p>{!$Label.lbl_help3}</p>
+
+<p class="footer">&copy;2010 Silverpop Systems Inc. All rights reserved. The Silverpop logo is a registered trademark of Silverpop Systems Inc.</p>
+</div>
+</apex:page>

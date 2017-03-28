@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <description>Stores custom setting info for the Textey application.</description>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>APIVersion__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>API Version</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AccountNumber__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Your organization&apos;s Simple SMS account number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Your organization&apos;s Simple SMS account number.</inlineHelpText>
+        <label>Account Number</label>
+        <length>6</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AccountSID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Account SID</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ApiKey__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <deprecated>false</deprecated>
+        <description>Your organization&apos;s Simple SMS API Key.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Your organization&apos;s Simple SMS API Key.</inlineHelpText>
+        <label>API Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Attach_Outbound_Media__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Save images sent on Outgoing messages as attachments.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Save images sent on Outgoing messages as attachments.</inlineHelpText>
+        <label>Attach Outbound Media</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CountryCode__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Country Code</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CurrentJobIds__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Current Job Ids</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Default_Object__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The default object to attach an incoming SMS Message to when the last outgoing message cannot be found.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The default object to attach an incoming SMS Message to when the last outgoing message cannot be found.</inlineHelpText>
+        <label>Default Search Object</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Enabled__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Enabled</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FromNumber__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>From Number</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>NotificationEmail__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Notification Email</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Reply_Parent_Object_Preference__c</fullName>
+        <deprecated>false</deprecated>
+        <description>When a reply message is sent this is the order in which the parent record is selected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When a reply message is sent this is the order in which the parent record is selected.</inlineHelpText>
+        <label>Reply Parent Object Preference</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SandboxPin__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Sandbox Pin</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Token__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Token</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Track_Links__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>All links that start with http:// or https:// will be re-written by Simple SMS and made trackable.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>All links that start with http:// or https:// will be re-written by Simple SMS and made trackable.</inlineHelpText>
+        <label>Track Links</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Trigger_Create_Lead__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Create a new Lead when an SMS Message is not matched.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Create a new Lead when an SMS Message is not matched.</inlineHelpText>
+        <label>Trigger: Create Lead</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Trigger_Lead_Conversion__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>When a Lead is converted its messages are related to the new Contact.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When a Lead is converted its messages are related to the new Contact.</inlineHelpText>
+        <label>Trigger: Lead Conversion</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Trigger_Match_Campaign__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Match the incoming message to a Campaign based on a keyword.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Match the incoming message to a Campaign based on a keyword.</inlineHelpText>
+        <label>Trigger Match Campaign</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Trigger_Post_Incoming__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Incoming messages will be posted to the message owner&apos;s Chatter feed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Incoming messages will be posted to the message owner&apos;s Chatter feed.</inlineHelpText>
+        <label>Trigger: Post Incoming</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>URI__c</fullName>
+        <deprecated>false</deprecated>
+        <description>URI for the Simple SMS API.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>URI for the Simple SMS API.</inlineHelpText>
+        <label>URI</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>UseSandbox__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>UseSandbox</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <label>Textey Settings</label>
+    <visibility>Public</visibility>
+</CustomObject>

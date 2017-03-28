@@ -1,0 +1,6 @@
+<apex:page showHeader="false"
+ 	tabStyle="SP_Select_Template__tab">
+	<p>
+	   {!$Label.lbl_template_help}	
+	</p>
+</apex:page>

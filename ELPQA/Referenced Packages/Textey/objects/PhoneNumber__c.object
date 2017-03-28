@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>A phone number that can be used to send or receive SMS messages.  These records should not be added or removed directly.  They will be managed via the Simple SMS api.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Available_for_Campaign__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This phone number can be used with a Campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This phone number can be used with a Campaign.</inlineHelpText>
+        <label>Available for Campaign</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Display_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A descriptive name for the phone number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A descriptive name for the phone number.</inlineHelpText>
+        <label>Display Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Help_Message_Length__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The number of characters in the Help Message.  Keep this message under 160 characters.</description>
+        <externalId>false</externalId>
+        <formula>LEN( Help_Message__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The number of characters in the Help Message.  Keep this message under 160 characters.</inlineHelpText>
+        <label>Help Message Length</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Help_Message__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The message that will be returned to the sender when they text HELP or INFO to this number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The message that will be returned to the sender when they text HELP or INFO to this number.</inlineHelpText>
+        <label>Help Message</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>IsActive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>This phone number is available for use.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This phone number is available for use.</inlineHelpText>
+        <label>Active</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>PhoneNumber__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The phone number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The phone number.</inlineHelpText>
+        <label>Phone Number</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Sid__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A unique identifier for this phone number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A unique identifier for this phone number.</inlineHelpText>
+        <label>Sid</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Stop_Message_Length__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The number of characters in the Stop Message. Keep this message under 160 characters.</description>
+        <externalId>false</externalId>
+        <formula>LEN( Stop_Message__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The number of characters in the Stop Message. Keep this message under 160 characters.</inlineHelpText>
+        <label>Stop Message Length</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Stop_Message__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The message that will be returned to the sender when they text STOP, END, QUIT, CANCEL, or UNSUBSCRIBE to this number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The message that will be returned to the sender when they text STOP, END, QUIT, CANCEL, or UNSUBSCRIBE to this number.</inlineHelpText>
+        <label>Stop Message</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <label>Phone Number</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Display_Name__c</columns>
+        <columns>IsActive__c</columns>
+        <columns>PhoneNumber__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>PhoneNumber-{0000}</displayFormat>
+        <label>Phone Number Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Phone Numbers</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Display_Name__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>PhoneNumber__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>IsActive__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Display_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>PhoneNumber__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>IsActive__c</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Display_Name__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>PhoneNumber__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>IsActive__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+</CustomObject>

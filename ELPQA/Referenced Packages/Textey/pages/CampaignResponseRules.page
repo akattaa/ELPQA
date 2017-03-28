@@ -1,0 +1,273 @@
+<apex:page standardController="Campaign" extensions="simplesms.Ctrl_CampaignResponseRules" doctype="html-5.0">
+    <html>
+    	<head>
+    		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    		<apex:styleSheet value="{!URLFOR($Resource.simplesms__SimpleSMS, '/css/bootstrap_scoped.min.css' )}" /> 
+
+    		<style>
+	    		table {
+	    			margin-top: 15px;
+	    		}
+	    		.container-fluid {
+	    			margin-top: 10px;
+	    		}
+	    		.header {
+                    background: url( '{!URLFOR($Resource.simplesms__SimpleSMS, '/images/logo-small.png' )}' ) no-repeat left top;
+                    min-height: 50px;
+                    padding: 50px 0px 0px 10px;
+                    color: #3F4B51;
+                }
+	    		.bottom-space {
+	    			margin-bottom: 20px;
+	    		}
+    		</style>
+    	</head>
+    	<body>
+    		<apex:form >
+	    		<apex:outputPanel layout="block" styleClass="container-fluid">
+	    			<apex:outputPanel layout="block" styleClass=" simple-sms-bootstrap row">
+	    				<apex:outputPanel id="header-messages" layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12 header bottom-space">
+	    					<h3>Campaign Response Rules: <b>{!campaign.Name}</b></h3>
+	    					
+	    					<!-- Messages 
+	    					<apex:outputPanel id="messages" layout="block" styleClass="simple-sms-bootstrap">
+		                        <apex:outputPanel layout="block" styleClass="alert alert-{!messageLevel}" rendered="{!message != null}">
+		                            <apex:outputText value="{!message}" />
+		                        </apex:outputPanel>
+	                    	</apex:outputPanel> -->
+	                    </apex:outputPanel>
+	                </apex:outputPanel>
+
+	                <!-- Buttons -->
+	                <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+	                	<apex:outputPanel id="buttons" layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12 bottom-space">
+		                            <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#addRuleModal">Add Rule</button>
+		                            <button type="button" class="btn btn-primary btn-xs" onclick="back();">Back</button>
+	                    </apex:outputPanel>
+	                </apex:outputPanel>
+
+	                <!-- Campaign Response Rules Table -->
+	                <apex:outputPanel id="table-container" layout="block" styleClass="simple-sms-bootstrap row">
+	                	<apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12" rendered="{!rules.size = 0}">
+	                		<p>There are no Response Rules for this Campaign, yet.  Start building your automated campaign conversation.</p>
+	                	</apex:outputPanel>
+
+	                	<apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12" rendered="{!rules.size > 0}">
+	                	 	<hr />
+	    					<!--<apex:form>-->
+		    					<table class="table table-striped table-hover table-bordered simple-sms-bootstrap">
+		    						<tr>
+		    							<th>Order</th>
+		    							<th>Save Lead Response</th>
+		    							<th>Save Contact Response</th>
+		    							<th>Auto-Response for Lead</th>
+		    							<th>Auto-Response for Contact</th>
+		    							<th></th>
+		    						</tr>
+		    						<apex:variable var="i" value="0" />
+		    						<apex:repeat value="{!rules}" var="r">
+		    							<tr>
+		    								<td>
+		    									<apex:outputField value="{!r.simplesms__Sequence__c}" />
+		    								</td>
+		    								<td>
+		    									<apex:outputField value="{!r.simplesms__Save_Response_Lead__c}" />
+		    								</td>
+		    								<td>
+		    									<apex:outputField value="{!r.simplesms__Save_Response_Contact__c}" />
+		    								</td>
+		    								<td>
+		    									<apex:outputField value="{!r.simplesms__Auto_Response_Template_Lead__c}" />
+		    								</td>
+		    								<td>
+		    									<apex:outputField value="{!r.simplesms__Auto_Response_Template_Contact__c}" />
+		    								</td>
+		    								<td>
+		    									<button class="btn btn-warning btn-xs btn-edit" data-order="{!r.simplesms__Sequence__c}" data-srl="{!r.simplesms__Save_Response_Lead__c}" 
+		    									        data-src="{!r.simplesms__Save_Response_Contact__c}" data-arl="{!r.simplesms__Auto_Response_Template_Lead__c}" 
+		    									        data-arc="{!r.simplesms__Auto_Response_Template_Contact__c}" data-ruleid="{!r.id}">Edit</button> &nbsp;
+
+	                                            <button class="btn btn-danger btn-xs" onclick="deleteRule( '{!r.Id}' );return false;">Delete</button>
+		    								</td>
+		    							</tr>
+		    							<apex:variable var="i" value="{!VALUE(i) + 1}" />
+		    						</apex:repeat>
+		    					</table>            
+	    					<!--</apex:form>-->
+	    				</apex:outputPanel>
+	    			</apex:outputPanel>
+	    		</apex:outputPanel>
+    		
+		        <div class="simple-sms-bootstrap">
+			        <div class="simple-sms-bootstrap modal fade" id="addRuleModal" tabindex="-1" role="dialog" aria-labelledby="addRuleModalLabel" aria-hidden="true">
+					  <div class="simple-sms-bootstrap modal-dialog">
+					    <div class="simple-sms-bootstrap modal-content">
+					      <div class="simple-sms-bootstrap modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					        	<span aria-hidden="true">&times;</span>
+					        </button>
+					        <h4 class="simple-sms-bootstrap modal-title" id="addRuleModalLabel">New Campaign Response Rule</h4>
+					      </div>
+					      <div class="simple-sms-bootstrap modal-body">
+					        <form class="simple-sms-bootstrap">
+					          
+					          <div class="form-group">
+					            <label for="order" class="control-label">Order:</label>
+					            <div>
+					                <input type="text" class="form-control" id="order" />
+					            </div>
+					          </div>
+
+					          <div class="simple-sms-bootstrap form-group">
+					            <apex:outputLabel styleClass="control-label">Save the Lead Response:</apex:outputLabel>
+					            <apex:selectList id="save-response-lead" size="1" styleClass="form-control leadField">
+		    						<apex:selectOptions value="{!writeableLeadFields}" />
+		    					</apex:selectList>
+					          </div>
+
+					          <div class="form-group">
+					            <apex:outputLabel for="save-response-contact" styleClass="control-label">Save the Contact Response:</apex:outputLabel>
+				            	<apex:selectList id="save-response-contact" size="1" styleClass="form-control contactField">
+	    							<apex:selectOptions value="{!writeableContactFields}" />
+	    						</apex:selectList>
+					          </div>
+
+					          <div class="form-group">
+					            <apex:outputLabel for="auto-response-lead" styleClass="control-label">Auto-Response for Leads:</apex:outputLabel>
+				            	<apex:selectList id="auto-response-lead" size="1" styleClass="form-control leadTemplate">
+	    							<apex:selectOptions value="{!leadTemplates}" />
+	    						</apex:selectList>
+					          </div>
+
+					          <div class="form-group">
+					            <apex:outputLabel for="auto-response-contact" styleClass="control-label">Auto-Response for Contacts:</apex:outputLabel>
+				            	<apex:selectList id="auto-response-contact" size="1" styleClass="form-control contactTemplate">
+	    							<apex:selectOptions value="{!contactTemplates}" />
+	    						</apex:selectList>
+					          </div>
+
+					          <input id="ruleId" type="hidden"></input>
+
+					        </form>
+					      </div>
+					      <div class="simple-sms-bootstrap modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					        <button id="saveRuleModal" type="button" class="btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				<apex:actionFunction name="refresh" action="{!refresh}" reRender="table-container" oncomplete="setupEventHandling();" />
+				<apex:actionFunction name="back" action="{!back}" />
+			</apex:form>
+    		<!-- JQuery -->
+	        <apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, '/js/jquery-2.1.1.min.js')}" />
+	        <apex:includeScript value="{!URLFOR($Resource.simplesms__SimpleSMS, '/js/bootstrap.min.js' )}" /> 
+	        
+	        <script type="text/javascript">
+	            var j$ = jQuery.noConflict();
+	          
+	            j$( document ).ready( function() { 
+	               j$( '#saveRuleModal' ).on( 'click', function() { 
+                      j$( this ).button( 'loading' );
+                      saveRule(); 
+				    });
+
+                  setupEventHandling();
+                });
+
+                function setupEventHandling()
+                {
+                    j$( '#addRuleModal' ).on( 'hidden.bs.modal', function( e ) {
+					 resetFormValues();
+				    });
+
+				    j$( ".btn-edit" ).on( 'click', function( e ) { 
+				  	   e.preventDefault();
+                       var b     = j$( this );
+                       var order = b.data( 'order' );
+                       var srl   = b.data( 'srl' );
+                       var src   = b.data( 'src' );
+                       var arl   = b.data( 'arl' );
+                       var arc   = b.data( 'arc' );
+                       var id    = b.data( 'ruleid' );
+
+                       var m = j$( "#addRuleModal" );
+                       m.find( "#order" ).val( order );
+                       m.find( ".leadField" ).val( srl );
+                       m.find( ".contactField" ).val( src );
+                       m.find( ".leadTemplate" ).val( arl );
+                       m.find( ".contactTemplate" ).val( arc );
+                       m.find( "#ruleId" ).val( id );
+                       m.modal( 'show' );
+                       return false;
+				    } );
+                }
+
+                function saveRule()
+                {
+                	var campaignId      = '{!campaign.Id}';
+                	var ord             = j$( "#order" ).val();
+                	var leadField       = j$( ".leadField" ).val();
+                	var contactField    = j$( ".contactField" ).val();
+                	var leadTemplate    = j$( ".leadTemplate" ).val();
+                	var contactTemplate = j$( ".contactTemplate" ).val();
+                	var ruleId          = j$( "#ruleId" ).val();
+
+                	Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.Ctrl_CampaignResponseRules.saveRule}',
+                        ord,
+                        leadField,
+                        contactField,
+                        leadTemplate,
+                        contactTemplate,
+                        ruleId,
+                        campaignId,
+                        function( result, event ){
+                        	j$( "#saveRuleModal" ).button( 'reset' );
+                            if( event.status ) {
+                               j$( "#addRuleModal" ).modal( 'hide' );
+                               refresh();
+                            } else if (event.type === 'exception') {
+                               alert( event.message );
+                            } else {
+                               alert( event.message );
+                            }
+                        }, 
+                        { escape: true }
+                    );
+                }
+
+                function deleteRule( id )
+                {
+                	Visualforce.remoting.Manager.invokeAction(
+                        '{!$RemoteAction.Ctrl_CampaignResponseRules.deleteRule}',
+                        id,
+                        function( result, event ){
+                            if( event.status ) {
+                               refresh();
+                            } else if (event.type === 'exception') {
+                               alert( event.message );
+                            } else {
+                               alert( event.message );
+                            }
+                        }, 
+                        { escape: true }
+                    );
+                }
+
+                function resetFormValues()
+                {
+                	console.log( 'resetting form values...' );
+                	j$( "#order" ).val( '' );
+                	j$( ".leadField" ).val( '' );
+                	j$( ".contactField" ).val( '' );
+                	j$( ".leadTemplate" ).val( '' );
+                	j$( ".contactTemplate" ).val( '' );
+                	j$( "#ruleId" ).val( '' );
+                }
+	        </script>
+    	</body>
+    </html>
+</apex:page>

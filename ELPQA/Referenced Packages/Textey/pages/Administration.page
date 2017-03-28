@@ -1,0 +1,1526 @@
+<!--
+ * FLYWHEEL ENTERPRISES CONFIDENTIAL
+ * __________________________________
+ * 
+ *  [2009] - [2014] Flywheel Enterprises, LLC
+ *  All Rights Reserved.
+ * 
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Flywheel Enterprises, LLC and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Flywheel Enterprises, LLC
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Flywheel Enterprises, LLC.
+ *
+ * 
+ * Visualforce page to perform account related operations.  This page interacts 
+ * with Simple SMS API data.
+ *
+-->
+<apex:page controller="simplesms.Ctrl_Administration" docType="html-5.0" action="{!init}">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Styling -->
+    <apex:styleSheet value="{!URLFOR($Resource.simplesms__SimpleSMS, '/css/bootstrap_scoped.min.css' )}" />
+    <style>
+    	textarea {
+            margin-bottom: 5px;
+        }
+        ul li {
+            margin-left: 0.9em;
+        }
+        table th {
+            background-color:#eee;
+        }
+        input.btn {
+            margin-right: 5px;
+        }
+        [id*=tab-container] {
+            margin-top: 20px;
+        }
+        [id*=messages] {
+            margin-top:15px;
+        }
+        .simple-sms-bootstrap a:focus {
+            outline:none;
+        }
+        .container-fluid {
+            margin-top: 10px;
+        }
+        .header {
+            background: url( '{!URLFOR($Resource.simplesms__SimpleSMS, '/images/logo-small.png' )}' ) no-repeat left top;
+            min-height: 50px;
+            padding: 50px 0px 0px 10px;
+            color:#3F4B51;
+        }
+        .subheader {
+            padding: 10px 0px 0px 55px;
+        }
+        .jumbotron {
+            margin-top:15px;
+        }
+        .jumbotron div {
+            margin-top: 10px;
+        }
+        .nav-tabs {
+            border-bottom: 1px solid #ddd;
+        }
+        .nav-tabs li a {
+            border-radius: 4px 4px 0 0;
+        }
+        .nav-tabs li.active a {
+            border: 1px solid #ddd;
+            border-bottom-color: transparent;
+        }
+        .nav-tabs li.active a:focus {
+            border:none;
+        }
+        .form-group-container {
+            margin-top: 20px;
+        }
+        .tab-content {
+            padding:15px 15px 15px 20px;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+        }
+        .tab-pane {
+            /*border: 1px solid #ddd;*/
+            /*background-color: #efefef;*/
+            padding: 10px;
+        }
+        .section {
+            border: 1px solid #ddd;
+            background-color: #efefef;
+            padding: 10px;
+            margin: 0px 5px 15px 0px;
+        }
+        .field-list div {
+            margin-bottom: 5px;
+        }
+        .field-list .section-header {
+            margin-bottom: 15px;
+        }
+        .field-label {
+            font-weight: bold;
+        }
+        .align-center {
+            text-align: center;
+        }
+        .card-brand-image {
+            min-width: 32px;
+            min-height: 32px;
+            background-repeat: no-repeat;
+            background-position: left center;
+        }
+        .align-control {
+            padding-top: 7px;
+        }
+        .hide {
+            display:none;
+        }
+        .modal .modal-body {
+            max-height:400px;
+            overflow-y:auto;
+        }
+    </style>
+    <!-- Page UI Starts -->  
+    <apex:outputPanel layout="block" styleClass="container-fluid">
+        <!-- ROW 1 | Header -->
+        <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+            <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12 header">
+                <h3>Account Management</h3>
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+        <!-- ROW 2 | Messages -->
+        <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+            <apex:outputPanel id="messages" layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <!-- Message Area -->
+                <apex:outputPanel layout="block" rendered="{!pageMessage != null}">
+                    <div class="alert alert-{!pageMessageType} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <apex:outputText value="{!pageMessage}" />
+                    </div>
+                </apex:outputPanel> 
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+        <apex:form styleClass="simple-sms-bootstrap theform">
+            <!-- ROW 3 | FORMS -->
+            <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+                <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    
+                    <apex:outputPanel layout="block" rendered="{!acct=null}">
+                        <div class="jumbotron">
+                            <h1>Hi, {!$User.FirstName}!</h1>
+                            <apex:outputPanel layout="block" rendered="{!isSandbox}">
+                                <p>It appears we're in a sandbox.</p>
+                                <p>Has Textey been installed in your production instance?</p>
+                                <p>
+                                    <a class="btn btn-primary btn-lg" href="#" role="button" data-toggle="modal" data-target="#credentialsModal">Yes</a>
+                                    <a class="btn btn-primary btn-lg" href="#" role="button" data-toggle="modal" data-target="#sandboxRegModal">No</a>
+                                </p>
+                            </apex:outputPanel>
+                            <apex:outputPanel layout="block" rendered="{!!isSandbox}">
+                                <p>It looks like your account credentials need to be set up.</p>
+                                <p>Do you have a Textey account, yet?</p>
+                                <p>
+                                    <a class="btn btn-primary btn-lg" href="#" role="button" data-toggle="modal" data-target="#credentialsModal">Yes</a>
+                                    <a class="btn btn-primary btn-lg" href="#" role="button" data-toggle="modal" data-target="#productionRegModal">No</a>
+                                </p>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+
+                    <!-- ADMINISTRATION NAVIGATION -->
+                    <apex:outputPanel layout="block" rendered="{!acct != null}">
+                        <div id="tab-container" role="tabpanel" class="simple-sms-bootstrap">
+                            <!-- Tab Navigation -->
+                            <ul id="tabNav" class="simple-sms-bootstrap nav nav-tabs" role="tablist">
+                                <li role="presentation" class="simple-sms-bootstrap active">
+                                    <a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home">Home</a>
+                                </li>
+                                <li role="presentation" class="simple-sms-bootstrap">
+                                    <a href="#message" id="message-tab" role="tab" data-toggle="tab" aria-controls="message">Messages</a>
+                                </li>
+                                
+                                <li role="presentation" class="simple-sms-bootstrap">
+                                    <a href="#numbers" id="numbers-tab" role="tab" data-toggle="tab" aria-controls="numbers">Phone Numbers</a>
+                                </li>
+                                <li role="presentation" class="simple-sms-bootstrap">
+                                    <a href="#configuration" id="configuration-tab" role="tab" data-toggle="tab" aria-controls="configuration">Configuration Settings</a>
+                                </li>
+                            </ul>
+                            
+                            <!-- Tab Content -->
+                            <div id="tabContent" class="simple-sms-bootstrap tab-content">
+                                
+                                <!-- Home Panel -->
+                                <div role="tabpanel" class="simple-sms-bootstrap tab-pane active fade in" id="home" aria-labelledby="home-tab">
+                                
+                                    <!-- Account Details -->
+                                    <div class="simple-sms-bootstrap row">
+                                        <div class="simple-sms-bootstrap col-xs-8 col-sm-8 col-md-8 col-lg-8 section">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                    <h4>Account Info</h4>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Account Status</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    <span class="label label-{!IF(acct.status = 'Active', 'success', IF(acct.status='Trial', 'info', 'danger'))}">{!acct.status}</span>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Plan</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    {!acct.plan}
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Billing Start Date</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    {!IF( LEN(acct.billingStartDate) < 1, 'N/A', acct.billingStartDate )}
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Billing Cycle</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    {!IF(LEN(acct.billingDayOfMonth) > 0, acct.billingDayOfMonth + ' of every month', 'N/A')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simple-sms-bootstrap col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+                                    </div>
+
+                                    <!-- Account Credentials -->
+                                    <div class="simple-sms-bootstrap row">
+                                        <div class="simple-sms-bootstrap col-xs-8 col-sm-8 col-md-8 col-lg-8 section">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                    <h4>Account Credentials</h4>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Account Number</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    {!config.AccountNumber__c}
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>API Key</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    <span id="api-key-h">********************************</span>
+                                                    <span id="api-key" class="hide">{!config.ApiKey__c}</span>
+                                                    &nbsp;<a onclick="toggleKey();" style="cursor:pointer;"><span class="glyphicon glyphicon-lock"></span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simple-sms-bootstrap col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+                                    </div>
+
+                                    <!-- Authenticated Users -->
+                                    <div class="simple-sms-bootstrap row"> 
+                                        <apex:outputPanel id="userSection" layout="block" styleClass="simple-sms-bootstrap col-xs-8 col-sm-8 col-md-8 col-lg-8 section">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 section-header">
+                                                    <h4>Authenticated User (for Inbound Messages)</h4>
+                                                </div>
+                                                <apex:outputPanel layout="block" styleClass="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="text-align:right;" rendered="{!authenticatedUsers.size = 0}">
+                                                    <button type="button" role="button" class="btn btn-primary btn-xs" onclick="startAuth();return false;">
+                                                        Authenticate Me
+                                                    </button>
+                                                </apex:outputPanel>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    Name
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    Email
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    &nbsp;
+                                                </div>
+                                                <apex:repeat value="{!authenticatedUsers}" var="u">
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                        {!u.FirstName} {!u.LastName} &nbsp;&nbsp;
+                                                        <apex:outputText styleClass="label label=warning" rendered="{!u.OrgType = 'Sandbox'}">{!u.OrgType}</apex:outputText>
+                                                    </div>
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                        {!u.Email}
+                                                    </div>
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 align-center">
+                                                        <a href="#" data-toggle="modal" data-target="#confirmationModal" data-action="delete-user" data-id="{!u.salesforceId}">Delete User</a>
+                                                    </div>
+                                                </apex:repeat>
+                                            </div>
+                                        </apex:outputPanel>
+                                        <div class="simple-sms-bootstrap col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+                                    </div>
+
+                                    <!-- Payment Methods -->
+                                    <div class="simple-sms-bootstrap row"> 
+                                        <apex:outputPanel id="paymentMethodSection" layout="block" styleClass="simple-sms-bootstrap col-xs-8 col-sm-8 col-md-8 col-lg-8 section">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 section-header">
+                                                    <h4>Payment Methods</h4>
+                                                </div>
+                                                <apex:outputPanel styleClass="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="text-align:right;" rendered="{!acct.plan != 'Trial'}">
+                                                    <button type="button" role="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#cardModal">
+                                                        Add Card
+                                                    </button>
+                                                </apex:outputPanel>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    Brand
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    Last Four
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    &nbsp;
+                                                </div>
+                                                <apex:repeat value="{!cards}" var="c">
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                        {!c.brand}
+                                                    </div>
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                        {!c.lastFour}
+                                                    </div>
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 align-center">
+                                                        <a href="#" data-toggle="modal" data-target="#confirmationModal" data-action="delete-card" data-id="{!c.id}">Delete Card</a>
+                                                    </div>
+                                                </apex:repeat>
+                                            </div>
+                                        </apex:outputPanel>
+                                        <div class="simple-sms-bootstrap col-xs-4 col-sm-4 col-md-4 col-lg-4"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Messages Panel -->
+                                <div role="tabpanel" class="simple-sms-bootstrap tab-pane fade" id="message" aria-labelledby="message-tab">
+                                    <!-- Message Balance -->
+                                    <div class="simple-sms-bootstrap row">
+                                        <apex:outputPanel id="messagesSection" layout="block" styleClass="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6 section">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 section-header">
+                                                    <h4>Balance</h4>
+                                                </div>
+                                                <apex:outputPanel styleClass="col-xs-3 col-sm-3 col-md-3 col-lg-3" style="text-align:right;" rendered="{!cards.size > 0}">
+                                                    <button type="button" role="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addMessagesModal">
+                                                        Add Messages
+                                                    </button>
+                                                </apex:outputPanel>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Monthly Messages</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    <apex:outputText value="{0,number}">
+                                                        <apex:param value="{!acct.messagesRemainingMonthly}" />
+                                                    </apex:outputText>  
+                                                    <apex:outputText rendered="{!LEN(acct.billingStartDate) > 0}">
+                                                        <i> (balance resets on {!acct.billingDayOfMonth} of every month)</i>
+                                                    </apex:outputText>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Anytime Messages</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    <apex:outputText value="{0,number}">
+                                                        <apex:param value="{!acct.messagesRemainingAllTime}" />
+                                                    </apex:outputText>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Total Messages</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    <apex:outputText value="{0,number}">
+                                                        <apex:param value="{!acct.messagesRemainingAllTime + acct.messagesRemainingMonthly}" />
+                                                    </apex:outputText>
+                                                </div>
+                                            </div>
+                                        </apex:outputPanel>
+                                        <div class="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+                                    </div>
+
+                                    <!-- Message Details -->
+                                    <div class="simple-sms-bootstrap row">
+                                        <div class="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6 section">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                    <h4>Message Details</h4>
+                                                </div>
+                                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 field-label">
+                                                    <b>Anytime Message Rate</b>
+                                                </div>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    ${!acct.anytimeMessageRateConverted} per message
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Numbers Panel -->
+                                <div role="tabpanel" class="simple-sms-bootstrap tab-pane fade" id="numbers" aria-labelledby="numbers-tab">
+                                    <!-- Current Phone Numbers -->
+                                    <apex:outputPanel layout="block" id="numbersSection"  styleClass="simple-sms-bootstrap row">
+                                        <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6" rendered="{!phoneWrappers.size > 0}">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                    <h4>Your Phone Numbers</h4>
+                                                </div>
+                                            
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <p class="pull-right">
+                                                        <span style="margin-right:10px;">
+                                                            <b>Page {!phonePaginator.currentPageNumber} of {!phonePaginator.lastPageNumber}</b>
+                                                        </span>
+                                                        <apex:commandButton value="Previous" action="{!previousPhones}" reRender="numbersSection" 
+                                                                            rendered="{!phonePaginator.hasPreviousPage}" styleClass="btn btn-primary btn-xs" />
+                                                        <apex:commandButton value="Next" action="{!nextPhones}" reRender="numbersSection" 
+                                                                            rendered="{!phonePaginator.hasNextPage}" styleClass="btn btn-primary btn-xs" />
+                                                    </p>
+                                                    <table class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Phone Number</th>
+                                                        <th>Related Record</th>
+                                                        <th style="{!IF(acct.callForwardingEnabled,'','display:none')}">Call Forwarding</th>
+                                                    </tr>
+                                                    <apex:variable value="{!TEXT((phonePaginator.currentPageNumber * phonePaginator.pageSize) - (phonePaginator.pageSize-1))}" var="i" />
+                                                    <apex:repeat value="{!wrappedPhones}" var="p">
+                                                        <tr>
+                                                            <td>{!i}</td>
+                                                            <td>{!p.phoneNumber.phoneNumberFormatted}</td>
+                                                            <td>
+                                                                <apex:outputLink value="/{!p.relatedObject.Id}" target="_blank" rendered="{!p.relatedObject != null}">{!p.relatedObject.Name}</apex:outputLink>
+                                                                <apex:outputPanel rendered="{!p.relatedObject = null}" >
+                                                                    <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#createPhoneNumberModal" data-id="{!p.phoneNumber.phoneNumberFormatted}">
+                                                                    Create
+                                                                    </button>
+                                                                </apex:outputPanel>
+                                                            </td>
+                                                            <td style="{!IF(acct.callForwardingEnabled,'','display:none')}">
+                                                                <apex:outputText value="{!p.phoneNumber.callForwardNumber}" style="margin-right:10px;"></apex:outputText>
+                                                                <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#updateNumberModal" 
+                                                                        data-number="{!p.phoneNumber.phoneNumber}" data-cf-number="{!p.phoneNumber.callForwardNumber}">
+                                                                    Edit
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <apex:variable value="{!TEXT(VALUE(i)+1)}" var="i"></apex:variable>
+                                                    </apex:repeat>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </apex:outputPanel>
+                                        <div class="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+                                    </apex:outputPanel>
+
+
+                                    <!-- Phone Number Search -->
+                                    <div class="simple-sms-bootstrap row">
+                                        <apex:outputPanel id="searchNumbersSection" layout="block" styleClass="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                            <div class="simple-sms-bootstrap row field-list">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                    <h4>Add Phone Numbers</h4>
+                                                </div>
+                                                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                                                    <p>You have <b>{!acct.phoneNumbersRemaining}</b> phone number{!IF( acct.phoneNumbersRemaining != 1,"s", "")} available to add.</p>
+                                                    <p><apex:outputText rendered="{!acct.phoneNumbersRemaining = 0}">Contact us if you need to purchase additional phone numbers.</apex:outputText></p>
+                                                </div>
+                                                <apex:outputPanel layout="block" styleClass="col-xs-3 col-sm-3 col-md-3 col-lg-3" rendered="{!acct.phoneNumbersRemaining > 0}">
+                                                    <button type="button" role="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#searchNumbersModal">
+                                                        Search Numbers
+                                                    </button>
+                                                </apex:outputPanel>
+                                                <apex:outputPanel layout="block" styleClass="col-xs-12 col-sm-12 col-md-12 col-lg-12" rendered="{!availablePhoneNumbers.size > 0}">
+                                                    <table class="table table-bordered table-hover">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    <apex:variable value="{!TEXT(1)}" var="j"></apex:variable>
+                                                    <apex:repeat value="{!availablePhoneNumbers}" var="p">
+                                                        <tr>
+                                                            <td>{!j}</td>
+                                                            <td>{!p.phoneNumberFormatted}</td>
+                                                            <td><a href="#" data-toggle="modal" data-target="#confirmationModal" data-action="add-number" data-id="{!p.phoneNumber}">Select</a></td>
+                                                        </tr>
+                                                        <apex:variable value="{!TEXT(VALUE(j)+1)}" var="j"></apex:variable>
+                                                    </apex:repeat>
+                                                    </table>
+                                                </apex:outputPanel>
+                                            </div>
+                                        </apex:outputPanel>
+                                        <div class="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Configuration Panel -->
+                                <div role="tabpanel" class="simple-sms-bootstrap tab-pane fade" id="configuration" aria-labelledby="configuration-tab">
+                                    <!-- Buttons -->
+                                    <div class="simple-sms-bootstrap row">
+                                        <apex:outputPanel id="configurationButtons" layout="block" styleClass="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom:15px;">
+                                            <apex:commandButton value="Edit" action="{!toggleEditMode}" reRender="configurationSection, configurationButtons" 
+                                                                styleClass="btn btn-primary btn-sm" rendered="{!!editMode}"></apex:commandButton>
+                                            <apex:commandButton value="Cancel" action="{!toggleEditMode}" reRender="configurationSection, configurationButtons" 
+                                                                styleClass="btn btn-primary btn-sm" rendered="{!editMode}"></apex:commandButton>
+                                            <apex:commandButton value="Save" styleClass="btn btn-primary btn-sm saveConfigurationBtn" onclick="startSaveConfiguration();return false;" rendered="{!editMode}"></apex:commandButton>
+                                        </apex:outputPanel>
+                                        <div class="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6"></div>
+                                    </div>
+                                    <!-- General Configuration -->
+                                    <apex:outputPanel id="configurationSection" layout="block">
+                                        <div class="simple-sms-bootstrap row">
+                                            <apex:outputPanel id="configurationSectionGeneral" layout="block" styleClass="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6 section">
+                                                <div class="simple-sms-bootstrap row field-list form-horizontal">
+                                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                        <h4>General Configuration</h4>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                        <div id="configurationCampaigns" class="form-group">
+                                                            <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <apex:outputPanel rendered="{!editMode}">
+                                                                            <apex:inputField value="{!config.simplesms__Trigger_Match_Campaign__c}"></apex:inputField> <b>Enable Campaigns</b>
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!!editMode}">
+                                                                            <apex:outputField value="{!config.simplesms__Trigger_Match_Campaign__c}"></apex:outputField> <b>Enable Campaigns</b>
+                                                                        </apex:outputPanel>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="configurationLinks" class="form-group">
+                                                            <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <apex:outputPanel rendered="{!editMode}">
+                                                                            <apex:inputField value="{!config.simplesms__Track_Links__c}"></apex:inputField> <b>Enable Trackable Links</b>
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!!editMode}">
+                                                                            <apex:outputField value="{!config.simplesms__Track_Links__c}"></apex:outputField> <b>Enable Trackable Links</b>
+                                                                        </apex:outputPanel>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="configurationImages" class="form-group">
+                                                            <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <apex:outputPanel rendered="{!editMode}">
+                                                                            <apex:inputField value="{!config.simplesms__Attach_Outbound_Media__c}"></apex:inputField> <b>Attach Outbound Images</b>
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!!editMode}">
+                                                                            <apex:outputField value="{!config.simplesms__Attach_Outbound_Media__c}"></apex:outputField> <b>Attach Outbound Images</b>
+                                                                        </apex:outputPanel>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="configurationLeadConversion" class="form-group">
+                                                            <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <apex:outputPanel rendered="{!editMode}">
+                                                                            <apex:inputField value="{!config.simplesms__Trigger_Lead_Conversion__c}"></apex:inputField> <b>Add Messages to Contact on Lead Conversion</b>
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!!editMode}">
+                                                                            <apex:outputField value="{!config.simplesms__Trigger_Lead_Conversion__c}"></apex:outputField> <b>Add Messages to Contact on Lead Conversion</b>
+                                                                        </apex:outputPanel>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div> 
+
+                                        <!-- Inbound Messaging -->
+                                        <div class="simple-sms-bootstrap row">
+                                            <apex:outputPanel id="configurationSectionInbound" layout="block" styleClass="simple-sms-bootstrap col-xs-6 col-sm-6 col-md-6 col-lg-6 section">
+                                                <div class="simple-sms-bootstrap row field-list form-horizontal">
+                                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-header">
+                                                        <h4>Inbound Message Configuration</h4>
+                                                    </div>
+
+                                                    <div id="configurationTriggerCreateLeads" class="form-group">
+                                                        <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <apex:outputPanel rendered="{!editMode}">
+                                                                        <apex:inputField value="{!config.simplesms__Trigger_Create_Lead__c}"></apex:inputField> <b>Auto-Create Leads</b>
+                                                                    </apex:outputPanel>
+                                                                    <apex:outputPanel rendered="{!!editMode}">
+                                                                        <apex:outputField value="{!config.simplesms__Trigger_Create_Lead__c}"></apex:outputField> <b>Auto-Create Leads</b>
+                                                                    </apex:outputPanel>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="configurationTriggerPostIncoming" class="form-group">
+                                                        <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <apex:outputPanel rendered="{!editMode}">
+                                                                        <apex:inputField value="{!config.simplesms__Trigger_Post_Incoming__c}"></apex:inputField> <b>Post Incoming Messages to Chatter</b>
+                                                                    </apex:outputPanel>
+                                                                    <apex:outputPanel rendered="{!!editMode}">
+                                                                        <apex:outputField value="{!config.simplesms__Trigger_Post_Incoming__c}"></apex:outputField> <b>Post Incoming Messages to Chatter</b>
+                                                                    </apex:outputPanel>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                        <div id="configurationDefaultSearchObject" class="form-group">
+                                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Default Search Object</label>
+                                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                                <apex:outputPanel layout="block" rendered="{!editMode}">
+                                                                    <apex:inputField value="{!config.simplesms__Default_Object__c}" styleClass="form-control" />
+                                                                </apex:outputPanel>
+                                                                <apex:outputPanel layout="block" styleClass="align-control" rendered="{!!editMode}">
+                                                                    <apex:outputField value="{!config.simplesms__Default_Object__c}" styleClass="form-control" />
+                                                                </apex:outputPanel>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-offset-1 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                                        <div id="configurationReplyParentPref" class="form-group">
+                                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Parent Objects for Reply</label>
+                                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                                <apex:outputPanel layout="block" rendered="{!editMode}">
+                                                                    <apex:inputField value="{!config.simplesms__Reply_Parent_Object_Preference__c}" styleClass="form-control" />
+                                                                </apex:outputPanel>
+                                                                <apex:outputPanel layout="block" styleClass="align-control" rendered="{!!editMode}">
+                                                                    <apex:outputField value="{!config.simplesms__Reply_Parent_Object_Preference__c}" styleClass="form-control" />
+                                                                </apex:outputPanel>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </apex:outputPanel>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+
+                    <!-- ENTER CREDENTIALS MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="credentialsModal" tabindex="-1" role="dialog" aria-labelledby="credentialsModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="credentialsModalLabel">Textey Account Credentials</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>Go ahead and enter your account credentials below.</p>
+                                        <apex:outputPanel id="accountNumber" layout="block" styleClass="form-group">
+                                            <apex:outputLabel value="Account Number:" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 accountNumber" />
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6 accountNumber">
+                                                <apex:inputText value="{!inputAccountNumber}" styleClass="form-control accountNumber" />
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+
+                                        <apex:outputPanel id="apiKey" layout="block" styleClass="form-group">
+                                            <apex:outputLabel value="API Key:" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 apiKey" />
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6 apiKey">
+                                                <apex:inputText value="{!inputApiKey}" styleClass="form-control apiKey" />
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <apex:commandButton action="{!updateCredentials}" value="Save" styleClass="btn btn-primary update-credentials" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SANDBOX REGISTRATION MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="sandboxRegModal" tabindex="-1" role="dialog" aria-labelledby="sandboxRegModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="sandboxRegModalLabel">New Account Activation - Contact Support</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>We're not able to activate your new account from a sandbox.  We need to collect a few details first.</p>
+                                        <p>Use the button below to email our support team.  Please include your contact information and the best way to reach you.</p>
+                                        <p>We'll have you up and running very soon!</p>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <a role="button" class="btn btn-primary" href="mailto:support@simplesmsapp.com?Subject=Sandbox%20Account%20Registration">Email Support</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTION REGISTRATION MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="productionRegModal" tabindex="-1" role="dialog" aria-labelledby="productionRegModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="productionRegModalLabel">New Account Activation</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>You can easily activate a new account here.</p>
+                                        <p>Your account will initially be in <b>Trial</b> status. That means you can test out Textey before signing up.</p>
+                                        <p>By activating your account you agree to Textey's <a href="http://www.textey.io/terms-of-service" target="_blank">Terms of Service</a> and <a href="http://www.textey.io/privacy-policy" target="_blank">Privacy Policy</a>.</p>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <apex:commandButton action="{!register}" value="Activate Now" styleClass="btn btn-primary activate" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW CARD MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="cardModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="cardModalLabel">Add Payment Method</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <div style="margin-bottom:10px;">
+                                            <center><h5>Card Details</h5></center>
+                                        </div>
+                                        <div id="cardNumber" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardNumber" for="cardNumberInput">Card Number:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardNumber">
+                                                <input type="text" id="cardNumberInput" class="form-control cardNumber" onkeyup="checkCardBrand();"></input>
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardBrand" class="form-group card-brand-display">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardBrand">Card Type:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardBrand">
+                                                <div class="card-brand-image"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardExp" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardExp">Expiration Date</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardExp">
+                                                <input type="text" id="cardExpInput" class="form-control cardExp" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardCvc" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardCvc">Security Code:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardCvc">
+                                                <input type="text" id="cardCvcInput" class="form-control cardCvc" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                        <hr/>
+
+                                        <div style="margin-bottom:10px;">
+                                            <center><h5>Billing Address</h5></center>
+                                        </div>
+
+                                        <div id="cardName" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardName">Name on Card:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardName">
+                                                <input type="text" id="cardNameInput" class="form-control cardName" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardAddrOne" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardAddrOne">Street Address:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardAddrOne">
+                                                <input type="text" id="cardAddrOneInput" class="form-control cardAddrOne" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardAddrTwo" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardAddrTwo">Apt/Suite:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardAddrTwo">
+                                                <input type="text" id="cardAddrTwoInput" class="form-control cardAddrTwo" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardCity" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardCity">City:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardCity">
+                                                <input type="text" id="cardCityInput" class="form-control cardCity" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardState" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardState">State:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardState">
+                                                <input type="text" id="cardStateInput" class="form-control cardState" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardZip" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardZip">Zip Code:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardZip">
+                                                <input type="text" id="cardZipInput" class="form-control cardZip" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="cardCountry" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3 cardCountry">Country:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6 cardCountry">
+                                                <input type="text" id="cardCountryInput" class="form-control cardCountry" />
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button id="addCardButton" type="button" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADD MESSAGES MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="addMessagesModal" tabindex="-1" role="dialog" aria-labelledby="addMessagesModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="addMessagesModalLabel">Add Messages</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>Add messages to your account. These Anytime Messages will not expire until you use them.</p>
+                                        <hr />
+
+                                        <div id="messageQuantity" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Quantity to Add:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:inputText value="{!messageQuantity}" styleClass="form-control messageQuantityInput" onkeyup="calculateMessageCost( j$( this ) );"></apex:inputText>
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="messageCost" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Cost:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6" style="padding-top:7px;">
+                                                <span id="messageCostOutput" class="empty"></span>
+                                            </div>
+                                        </div>
+
+                                        <div id="messagesPaymentMethod" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Payment Method:</label>
+                                             <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:selectList styleClass="form-control paymentIdInput" value="{!paymentId}" size="1">
+                                                    <apex:selectOptions value="{!paymentOptions}"></apex:selectOptions>
+                                                </apex:selectList>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button id="addMessagesButton" type="button" class="btn btn-primary" data-loading-text="Processing..." autocomplete="off">Add Messages</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEARCH NUMBERS MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="searchNumbersModal" tabindex="-1" role="dialog" aria-labelledby="searchNumbersModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="searchNumbersModalLabel">Add a Phone Number</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>
+                                            You can search for a phone number by entering a 10-digit wildcard(*) search.  An asterik will match any number.
+                                        </p>
+                                        <p>
+                                            Examples: <br /><br />
+                                            1. Enter <b>770*******</b> to match numbers that begin with area code 770. <br /><br />
+                                            2. Enter <b>*******770</b> to match numbers that end with 770.  
+                                        </p>
+                                        <hr />
+
+                                        <div id="searchNumbersTerm" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Search Term:</label>
+                                             <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:inputText styleClass="form-control searchNumbersTermInput" value="{!searchTerm}"></apex:inputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button id="searchNumbersBtn" type="button" class="btn btn-primary" data-loading-text="Searching..." autocomplete="off">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CREATE PHONE NUMBER RECORD MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="createPhoneNumberModal" tabindex="-1" role="dialog" aria-labelledby="createPhoneNumberModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="createPhoneNumberModalLabel">Create Phone Number Record</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>Create a Phone Number record to make this number available for use in Salesforce.</p>
+                                        <hr />
+
+                                        <div id="pnPhoneNumber" class="form-group">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Phone Number:</label>
+                                            <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <div id="pnPhoneNumberOutput" class="align-control"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="pnDisplayName" class="form-group">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Name:</label>
+                                             <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <input type="text" id="pnDisplayNameInput" class="form-control"></input>
+                                             </div>
+                                        </div>
+
+                                        <div id="pnHelpMessage" class="form-group">
+                                             <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Help Message:</label>
+                                             <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <textarea id="pnHelpMessageInput" class="form-control" style="height:90px;"></textarea>
+                                             </div>
+                                        </div>
+
+                                        <div id="pnStopMessage" class="form-group">
+                                             <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Stop Message:</label>
+                                             <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <textarea id="pnStopMessageInput" class="form-control" style="height:90px;"></textarea>
+                                             </div>
+                                        </div>
+
+                                        <div id="pnCampaigns" class="form-group">
+                                             <div class="col-xs-offset-4 col-sm-offset-2 col-md-offset-2 col-lg-offset-3">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input id="pnCampaignsInput" type="checkbox"></input> <b>Reserved for Campaigns</b>
+                                                    </label>
+                                                </div>
+                                             </div>
+                                        </div>
+
+                                        <div id="pnActive" class="form-group">
+                                             <div class="col-xs-offset-4 col-sm-offset-2 col-md-offset-2 col-lg-offset-3">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input id="pnActiveInput" type="checkbox"></input> <b>Active</b>
+                                                    </label>
+                                                </div>
+                                             </div>
+                                        </div>            
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button id="createPhoneNumberBtn" type="button" class="btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CALL FORWARDING MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="updateNumberModal" tabindex="-1" role="dialog" aria-labelledby="updateNumberModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="updateNumberModalLabel">Setup Call Forwarding</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body form-horizontal">
+                                        <p>
+                                            Incoming calls to this phone number can be forwarded to one of your business phone numbers. Enter the phone number where you want
+                                            to forward incoming calls.
+                                        </p>
+                                        <hr />
+
+                                        <div id="callForwardNumber" class="form-group has-feedback">
+                                            <label class="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3">Forward To:</label>
+                                             <div class="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <input type="text" id="callForwardNumberInput" class="form-control"></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button id="updateNumberBtn" type="button" class="btn btn-primary" data-loading-text="Saving..." autocomplete="off">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONFIRMATION MODAL -->
+                    <div class="simple-sms-bootstrap">
+                        <div class="simple-sms-bootstrap modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                            <div class="simple-sms-bootstrap modal-dialog">
+                                <div class="simple-sms-bootstrap modal-content">
+                                    <div class="simple-sms-bootstrap modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="simple-sms-bootstrap modal-title" id="confirmationModalLabel">Confirm</h4>
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-body">
+                                        
+                                    </div>
+                                    <div class="simple-sms-bootstrap modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary confirm" data-loading-text="Hang on..." autocomplete="off">Yes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </apex:outputPanel>
+            </apex:outputPanel>
+
+            <!-- ACTION FUNCTIONS -->
+            <apex:actionFunction name="deleteUser" action="{!deleteUser}" reRender="userSection, messages" oncomplete="hideModal( '#confirmationModal' );">
+                <apex:param name="userParam" assignTo="{!deleteUserId}" value="" />
+            </apex:actionFunction>
+
+            <apex:actionFunction name="deleteCard" action="{!deleteCard}" reRender="paymentMethodSection, messages" oncomplete="hideModal( '#confirmationModal' );">
+                <apex:param name="paramOne" assignTo="{!selectedCardId}" value="" />
+            </apex:actionFunction>
+
+            <apex:actionFunction name="addCard" action="{!addCard}" reRender="paymentMethodSection, messages" oncomplete="hideModal('#cardModal');">
+                <apex:param name="paramOne" assignTo="{!cardToken}" value="" />
+            </apex:actionFunction>
+
+            <apex:actionFunction name="buyMessages" action="{!buyMessages}" reRender="messagesSection, messages" oncomplete="hideModal( '#addMessagesModal');"></apex:actionFunction>
+
+            <apex:actionFunction name="searchPhoneNumbers" action="{!searchPhoneNumbers}" reRender="searchNumbersSection, messages" oncomplete="hideModal( '#searchNumbersModal' );"></apex:actionFunction>
+
+            <apex:actionFunction name="addNumber" action="{!addNumber}" rerender="numbersSection, searchNumbersSection, messages" oncomplete="hideModal( '#confirmationModal' );">
+                <apex:param name="selectedNumber" assignTo="{!selectedNumber}" value="" />
+            </apex:actionFunction>
+
+            <apex:actionFunction name="updateNumber" action="{!updatePhoneNumber}" rerender="numbersSection, messages" oncomplete="hideModal( '#updateNumberModal' );">
+                <apex:param name="paramOne" assignTo="{!selectedNumber}" value="" />
+                <apex:param name="paramTwo" assignTo="{!callForwardNumber}" value="" />
+            </apex:actionFunction>
+
+            <apex:actionFunction name="saveConfiguration" action="{!saveConfiguration}" reRender="configurationSection, configurationButtons, messages"></apex:actionFunction>
+
+            <apex:actionFunction name="refreshPhoneNumbers" action="{!refresh}" reRender="numbersSection" oncomplete="hideModal( '#createPhoneNumberModal' );"></apex:actionFunction>
+
+        </apex:form>
+    </apex:outputPanel>
+
+    <!-- JQuery -->
+    <apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, '/js/jquery-2.1.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, '/js/bootstrap.min.js')}" />
+    <apex:includeScript value="https://js.stripe.com/v2/" />
+
+    <script type="text/javascript">
+    	j$ = jQuery.noConflict();
+
+        Stripe.setPublishableKey('pk_live_4Yk5PZN0MHrAKLASWTpfbd8x');
+
+    	j$( document ).ready( function() { 
+    		j$( "#tabNav a" ).click( function( e ) { 
+               e.preventDefault();
+              j$( this ).tab( 'show' );
+            });
+
+            j$( '.activate' )
+              .attr( 'data-loading-text', 'Activating...' )
+              .attr( 'autocomplete', 'off' )
+              .on( 'click', function() { 
+               j$( this ).button( 'loading' );
+            });
+
+            j$( '.update-credentials' )
+              .attr( 'data-loading-text', 'Saving...' )
+              .attr( 'autocomplete', 'off' )
+              .on( 'click', function() { 
+               j$( this ).button( 'loading' );
+            });
+
+            j$( '#addMessagesButton' )
+               .on( 'click', function() { 
+                   j$( this ).button( 'loading' );
+                   buyMessages();
+                });
+
+            j$( "#addCardButton" )
+               .attr( 'data-loading-text', 'Adding Card...' )
+               .attr( 'autocomplete', 'off' )
+               .on( 'click', function() { 
+                   j$( this ).button( 'loading' );
+                   handleNewPaymentMethod();
+            });
+
+            j$( "#searchNumbersBtn" )
+               .on( 'click', function() { 
+                   j$( this ).button( 'loading' );
+                   searchPhoneNumbers();
+               });
+
+            j$( "#createPhoneNumberBtn" )
+               .on( 'click', function() { 
+                   j$( this ).button( 'loading' );
+
+                   Visualforce.remoting.Manager.invokeAction(
+                       '{!$RemoteAction.Ctrl_Administration.savePhoneNumberRecordRemote}',
+                       j$( "#pnPhoneNumberOutput" ).text(),
+                       j$( "#pnDisplayNameInput" ).val(),
+                       j$( "#pnHelpMessageInput").val(),
+                       j$( "#pnStopMessageInput").val(),
+                       j$( "#pnCampaignsInput").is( ':checked' ),
+                       j$( "#pnActiveInput").is( ':checked' ),
+                       function( result, event ) {
+                           if( event.status ) {
+                              if( result == 'success' ) {
+                                 refreshPhoneNumbers();
+                              } else {
+                                 j$( "#createPhoneNumberModal" ).find( 'modal-body' ).append( result );
+                              }
+                           } else if (event.type === 'exception') {
+                              console.log( event.message );
+                           } else {
+                              console.log( event.message );
+                           }
+                       }, 
+                       { escape: true }
+                   );
+               });
+
+            j$("#updateNumberModal").on('show.bs.modal',function(event) { 
+                var button = j$(event.relatedTarget);
+                var phoneNumber = button.data('number');
+                j$("#callForwardNumberInput").val(button.data('cf-number'));
+            
+                j$("#updateNumberBtn").off("click");  // remove existing click events.
+
+                j$("#updateNumberBtn")
+                   .on('click',function() { 
+                      j$(this).button('loading');
+                      var callForwardNumber = j$("#callForwardNumberInput").val();
+                      console.log('PhoneNumber: ' + phoneNumber);
+                      console.log('Call Forward: ' + callForwardNumber);
+                      updateNumber(phoneNumber,callForwardNumber);
+                   })
+            })
+            
+
+            j$( 'div[id*=Modal]' )
+               .on( 'hidden.bs.modal', function( e ) {
+                   resetFormValues();
+                })
+               .on( 'show.bs.modal', function( e ) { 
+                   ts = j$( this );
+                   ts.find( '.glyphicon' ).hide();
+                   ts.find( '.card-brand-display' ).hide();
+                   ts.find( '.form-group' ).removeClass( 'has-error has-success' );
+                });
+
+            j$( '#confirmationModal' ).on('show.bs.modal', function( event ) {
+              var modal     = j$( this );
+              var button    = j$( event.relatedTarget );
+              var action    = button.data( 'action' );
+              var targetId  = button.data( 'id' );
+
+              if( action == "delete-user" ) {
+                 modal.find( '.modal-body' ).html( '<p>Without an authenticated user you will not receive inbound messages.</p><p>Are you sure you want to delete this user?</p>' );
+                 j$( 'button.confirm' )
+                    .off( 'click' )
+                    .on( 'click', function() { 
+                       j$( this ).button( 'loading' );
+                       deleteUser( targetId );
+                 });
+              } else if( action == 'delete-card' ) {
+                 modal.find( '.modal-body' ).html( '<p>Are you sure you want to delete this card?</p>' );
+                 j$( 'button.confirm' )
+                    .off( 'click' )
+                    .on( 'click', function() { 
+                       j$( this ).button( 'loading' );
+                       deleteCard( targetId );
+                 });
+              } else if( action == 'add-number' ) {
+                 modal.find( '.modal-body' ).html( '<p>Are you sure you want to add this number?</p>' );
+                 j$( 'button.confirm' )
+                     .off( 'click' )
+                     .on( 'click', function() {
+                       j$( this ).button( 'loading' );
+                       addNumber( targetId );
+                 });
+              }
+            });
+
+            j$( '#createPhoneNumberModal' ).on('show.bs.modal', function( event ) {
+                var modal     = j$( this );
+                var button    = j$( event.relatedTarget );
+                var number    = button.data( 'id' );
+
+                j$( '#pnPhoneNumberOutput' ).text( number );
+                j$( "#pnDisplayNameInput" ).val('');
+                j$( "#pnHelpMessageInput").val('');
+                j$( "#pnStopMessageInput").val('');
+                j$( "#pnCampaignsInput").prop('checked', false);
+                j$( "#pnActiveInput").prop('checked', false);
+            });
+
+            j$( "#addMessagesModal" ).on( 'show.bs.modal', function( event ) { 
+               j$( "#addMessagesButton" ).attr( 'disabled', 'disabled' );
+               j$( "#messageCost" ).hide();
+            });
+
+            j$( 'input[class*="card"]' ).keyup( function( e ) {
+               var code = e.keyCode || e.which; 
+               var inp = String.fromCharCode( code );
+               if( code == '8' || /[a-zA-Z0-9\/ ]/.test( inp ) ) {
+                  addNeutral( j$( this ) );
+               }               
+            });
+
+            j$( ".theform" ).keydown( function( e ) { 
+               var code = e.keyCode || e.which;
+               if( code == 13 ) {
+                  e.preventDefault();
+                  return false;
+               }
+            });
+
+            j$( 'input.cardExp' )
+               .attr( 'placeholder', 'mm/yyyy' ); 
+
+            j$( '[data-toggle="tooltip"]' ).tooltip();
+    	});
+
+        function handleNewPaymentMethod()
+        {
+            if( !validateNewCardInputs() ) {
+                j$( "#addCardButton" ).button( 'reset' );
+                return;
+            } else {
+                createCard();
+            }
+        }
+
+        function createCard()
+        {
+            Stripe.card.createToken( { 
+                    number:          j$( "input.cardNumber" ).val(),
+                    exp_month:       j$( "input.cardExp" ).val().split('/')[0],
+                    exp_year:        j$( "input.cardExp" ).val().split('/')[1],
+                    cvc:             j$( "input.cardCvc" ).val(),
+                    name:            j$( "input.cardName" ).val(),
+                    address_line1:   j$( "input.cardAddrOne" ).val(),
+                    address_line2:   j$( "input.cardAddrTwo" ).val(),
+                    address_city:    j$( "input.cardCity" ).val(),
+                    address_state:   j$( "input.cardState" ).val(),
+                    address_zip:     j$( "input.cardZip" ).val(),
+                    address_country: j$( "input.cardCountry" ).val()
+                },
+                stripeResponseHandler
+            );
+
+        }
+
+        function stripeResponseHandler( status, response )
+        {           
+            if( response.error ) {
+                alert( "Unexpected Error: " + response.error.message );
+                j$( "#addCardButton" ).button( 'reset' );
+            } else {
+                 addCard( response.id );
+            }
+        }
+
+        function validateNewCardInputs()
+        {
+            j$( "#cardModal" )
+               .find( '.form-group' ).removeClass( 'has-success has-error ' )
+               .find( '.glyphicon' ).hide();
+
+            var isValid = true;
+
+            j$( 'input[class*="card"]' ).each( function( index ) {
+               ts  = j$( this ); 
+               id  = ts.attr( 'id' );
+               val = ts.val();
+
+               if( id == "cardNumberInput" ) {
+                  if( Stripe.card.validateCardNumber( val ) ) {
+                     addSuccess( ts );
+                  } else {
+                     addError( ts );
+                     isValid = false;
+                  }
+               } else if( id == "cardExpInput" ) {
+                  if( (/^\d{2,2}\/\d{4,4}$/.test( val ) ) ) {
+                     if( Stripe.card.validateExpiry( val.split("/")[0], val.split("/")[1] ) ) {
+                        addSuccess( ts );
+                     } else {
+                        addError( ts );
+                        isValid = false;
+                     }
+                  } else {
+                     addError( ts );
+                     isValid = false;
+                  }
+               } else if( id == "cardCvcInput" ) {
+                  if( Stripe.card.validateCVC( val ) ) {
+                     addSuccess( ts );
+                  } else {
+                     addError( ts );
+                     isValid = false;
+                  }
+               } else if( id == "cardAddrTwoInput" ) {
+                  addSuccess( ts );
+               } else {
+                  if( val.length > 1 ) {
+                     addSuccess( ts );
+                  } else {
+                     addError( ts );
+                     isValid = false;
+                  }
+               }
+            });
+
+            return isValid;
+        }
+
+        function addError( elem )
+        {
+            fg = elem.parents( '.form-group' );
+            fg.addClass( 'has-error' );
+            
+            elem.siblings( '.glyphicon-remove' ).show();
+        }
+
+        function addSuccess( elem )
+        {
+            fg = elem.parents( '.form-group' );
+            fg.addClass( 'has-success' );
+            
+            elem.siblings( '.glyphicon-ok' ).show();
+        }
+
+        function addNeutral( elem )
+        {
+            fg = elem.parents( '.form-group' );
+            fg.removeClass( 'has-success has-error' );
+            
+            elem.siblings( '.glyphicon' ).hide();
+        }
+
+        function checkCardBrand()
+        {
+            cardNumber = j$( "input.cardNumber" ).val();
+            
+            if( cardNumber != null ) {
+               cardType = Stripe.card.cardType( cardNumber );
+               if( cardType == 'Unknown'  ) {
+                  j$( ".card-brand-image" ).attr( 'style', '' );
+                  j$( ".card-brand-display" ).hide();
+               } else if( cardType == 'Visa' ) {
+                  j$( ".card-brand-image" ).attr( "style", "background-image:url({!URLFOR($Resource.SimpleSMS, '/images/visa-32.png' )})" );
+                  j$( ".card-brand-display" ).show();
+               } else if( cardType == 'MasterCard' ) {
+                  j$( ".card-brand-image" ).attr( "style", "background-image:url({!URLFOR($Resource.SimpleSMS, '/images/mastercard-32.png' )})" );
+                  j$( ".card-brand-display" ).show();
+               } else if( cardType == 'American Express' ) {
+                  j$( ".card-brand-image" ).attr( "style", "background-image:url({!URLFOR($Resource.SimpleSMS, '/images/amex-32.png' )})" );
+                  j$( ".card-brand-display" ).show();
+               }
+            }           
+        }
+
+        function startAuth()
+        {
+            window.open( "{!authenticationLink}", "_target" );
+        }
+
+        function calculateMessageCost( msgInput )
+        {
+            var a = Number( msgInput.val() );
+            var b = Number( '{!acct.anytimeMessageRateConverted}' );
+            var c = a * b;
+
+            j$( "#messageCostOutput" ).text( '$' + c.toFixed(2) ).removeClass( 'text-success text-danger' );
+            addNeutral( msgInput );
+
+            if( !a ) {
+               j$( "#messageCostOutput" ).text( '' );
+               addNeutral( msgInput );
+               j$( "#addMessagesButton" ).attr( 'disabled', 'disabled' );
+               j$( "#messageCost" ).hide();
+            } else if( a % 100 == 0 ) {
+                  j$( "#messageCostOutput" ).text( '$' + c.toFixed(2) ).addClass( 'text-success' );
+                  addSuccess( msgInput );
+                  j$( "#addMessagesButton" ).removeAttr( 'disabled' );
+                  j$( "#messageCost" ).show();
+            } else {
+                  j$( "#messageCostOutput" ).text( 'Quantity should be in multiples of 100.' ).addClass( 'text-danger' );
+                  addError( msgInput );
+                  j$( "#addMessagesButton" ).attr( 'disabled', 'disabled' );
+                  j$( "#messageCost" ).show();
+            }
+        }
+
+        function startSaveConfiguration()
+        {
+            j$( '.saveConfigurationBtn' )
+               .removeAttr( 'data-loading-text' )
+               .removeAttr( 'autocomplete' )
+               .attr( 'data-loading-text', 'Saving...' )
+               .attr( 'autocomplete', 'off' )
+               .button( 'loading' );
+
+               saveConfiguration();
+        }
+
+        function resetFormValues()
+        {
+            j$( "div[id*=Modal]" ).find( 'input[type=text]' ).val( '' );
+            j$( "div[id*=Modal]" ).find( '.btn' ).button( 'reset' );
+            j$( "div[id*=Modal]" ).find( '.empty' ).empty();
+        }
+
+        function resetButton( btn )
+        {
+            j$( btn ).button( 'reset' );
+        }
+
+        function hideModal( modalName )
+        {
+            j$( modalName ).modal( 'hide' );
+        }
+
+        function toggleKey()
+        {
+            visible = j$( "#api-key-h" ).hasClass( 'hide' );
+
+            if( visible ) {
+               j$( "#api-key" ).addClass( 'hide' );
+               j$( "#api-key-h" ).removeClass( 'hide' );
+            } else {
+               j$( "#api-key" ).removeClass( 'hide' );
+               j$( "#api-key-h" ).addClass( 'hide' );
+            }
+        }
+
+    </script>
+</apex:page>

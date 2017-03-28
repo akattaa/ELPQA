@@ -1,0 +1,373 @@
+<!--
+ * FLYWHEEL ENTERPRISES CONFIDENTIAL
+ * __________________________________
+ * 
+ *  [2009] - [2014] Flywheel Enterprises, LLC
+ *  All Rights Reserved.
+ * 
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Flywheel Enterprises, LLC and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Flywheel Enterprises, LLC
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Flywheel Enterprises, LLC.
+ *
+ * 
+ * Visualforce page to send Messages.  This page is reusable and will work
+ * with most standard and custom objects.
+ *
+-->
+<apex:page doctype="html-5.0" controller="simplesms.SimpleSMSSendController" action="{!init}" standardStyleSheets="true" 
+           showHeader="true" sidebar="true">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Simple SMS - Send Message</title>
+    
+    <!-- Styling -->
+    <apex:styleSheet value="{!URLFOR($Resource.simplesms__SimpleSMS, '/css/bootstrap_scoped.min.css' )}" />   
+    <style>
+        [id*=wordcount] { 
+            padding:5px; 
+        }
+        [id*=messages] {
+            margin-top: 15px;
+        }
+        [id*=phone-image-container] {
+            background-image: url( '{!URLFOR($Resource.simplesms__SimpleSMS, '/images/phone-background.png' )}' );
+            background-repeat: no-repeat;
+        }
+        .container-fluid {
+            margin-top: 10px;
+        }
+        .header {
+            background: url( '{!URLFOR($Resource.simplesms__SimpleSMS, '/images/logo-small.png' )}' ) no-repeat left top;
+            min-height: 50px;
+            padding: 50px 0px 0px 10px;
+            color:#3F4B51;
+        }
+        .message-panel {
+            margin-bottom:25px;
+        }
+        .file-panel {
+            margin-bottom:25px;
+        }
+        .form-file {
+            position:relative;
+            top:5px;
+        }
+        #addPhotoBtn {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        #removePhotoBtn {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+        .attach-btn {
+            padding-top:5px;
+        }
+        .blue {
+            color: #428bca;
+        }
+        .subheader {
+            padding: 10px 0px 0px 55px;
+        }
+        .form-group-container {
+            margin-top: 20px;
+        }
+        .outer-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .inner-container {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #efefef;
+        }
+        .phone-image-container {
+            background-image: url( '{!URLFOR($Resource.simplesms__SimpleSMS, '/images/phone-background.png' )}' );
+            background-repeat: no-repeat;
+            min-width: 225px;
+            min-height: 385px;
+        }
+        .phone-text-container {
+            position:relative; 
+            top: 66px;
+            left: 70px; 
+            height: 112px; 
+            width: 158px; 
+            padding: 1px;
+            color: white;
+            font-size: 1em;
+            word-wrap: break-word;
+        }
+        .phone-text-image-container {
+            position:relative; 
+            top: 80px;
+            left: 65px; 
+            height: 105px; 
+            width: 165px; 
+            padding: 1px;
+            text-align: center;
+        }
+        .button-container {
+            padding-left: 30px;
+        }
+        .simple-sms-bootstrap input.btn-primary {
+            margin-right: 5px;
+        }
+    </style>
+
+    <!-- Page UI Starts -->  
+    <apex:outputPanel layout="block" styleClass="container-fluid">
+
+        <!-- ROW 1 | HEADER -->
+        <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+            <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12 header">
+                <h3>Send a Message</h3>
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+        <!-- ROW 2 | Messages -->
+        <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+            <apex:outputPanel id="messages" layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <!-- Message Area -->
+                <apex:outputPanel layout="block" rendered="{!pageMessage != null}">
+                    <div class="alert alert-{!pageMessageType} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <apex:outputText value="{!pageMessage}" />
+                    </div>
+                </apex:outputPanel> 
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+        <apex:form id="theform" styleClass="simple-sms-bootstrap theform" rendered="{!valid}"> 
+            <!-- ROW 3 | BUTTONS -->
+            <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+                <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12 button-container">
+                    <apex:commandButton value="Send Now" action="{!sendSms}" styleClass="btn btn-primary btn-sm sendBtn" rendered="{!!success}" />
+                    <apex:commandButton value="Cancel" action="{!cancel}" styleClass="btn btn-primary btn-sm" rendered="{!!success}" />
+                    <apex:commandButton value="Back" action="{!cancel}" styleClass="btn btn-primary btn-sm" rendered="{!success}" />
+                </apex:outputPanel>
+            </apex:outputPanel>
+
+            <!-- ROW 4 | FORMS -->
+            <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap row">
+                <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="outer-container">
+                        <div class="inner-container">
+                            <div class="simple-sms-bootstrap row">
+                                <div class="simple-sms-bootstrap col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <!-- FORM WAS HERE -->
+                                    <div class="form-group-container form-horizontal">                          
+                                        <!-- Select Phone Number to Send From -->
+                                        <apex:outputPanel layout="block" styleClass="form-group">
+                                            <apex:outputLabel value="From:" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3" 
+                                                              for="senderphonelist"/>
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:selectList id="senderphonelist" value="{!from_num}" size="1" styleClass="form-control form-to">
+                                                    <apex:selectOptions value="{!availablePhoneNumbers}" />
+                                                </apex:selectList>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+
+                                        <!-- Select Phone Field to Send To-->
+                                        <apex:outputPanel layout="block" styleClass="form-group">
+                                            <apex:outputLabel value="To:" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3" for="phonelist" />
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:selectList id="phonelist" value="{!to}" size="1" styleClass="form-control form-from">
+                                                    <apex:selectOptions value="{!phoneNumbers}" />
+                                                </apex:selectList>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+
+                                        <!-- Select the Template to Use -->
+                                        <apex:outputPanel layout="block" styleClass="form-group">
+                                            <apex:outputLabel value="Template:" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3" for="template" />
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:selectList id="template" value="{!templateCode}" onchange="refreshMessageRemote();" size="1" 
+                                                                 styleClass="form-control form-template">
+                                                    <apex:selectOptions value="{!templates}" />
+                                                </apex:selectList>
+                                                <div id="loading-template">
+                                                    <apex:image value="{!URLFOR($Resource.simplesms__SimpleSMS, '/images/loading.gif' )}" />
+                                                </div>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+
+                                        <!-- Enter Message -->
+                                        <apex:outputPanel layout="block" styleClass="form-group message-panel" id="message-panel">
+                                            <apex:outputLabel value="Message:" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3" />
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:inputTextArea value="{!message}" id="themessage" onkeyup="handleMessageInput( this.value )" 
+                                                                    style="height:80px;" styleClass="form-control form-message" />
+                                                <apex:outputPanel layout="block">
+                                                    <apex:outputPanel layout="block" styleClass="pull-left attach-btn">
+                                                        <span id="addPhotoBtn" >
+                                                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                                                        </span>
+                                                        <span id="removePhotoBtn" class="label label-danger">
+                                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                                        </span>
+                                                        <span id="filename"></span>
+                                                    </apex:outputPanel>
+                                                    <apex:outputPanel layout="block" id="wordcount" styleClass="pull-right" style="text-align:right;font-size:10px;">
+                                                        <span id="wordsleft" class="label label-success">160</span> characters available
+                                                    </apex:outputPanel>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+
+                                        <!-- Upload a file -->
+                                        <apex:outputPanel layout="block" styleClass="form-group file-panel" id="file-panel">
+                                            <apex:outputLabel value="" styleClass="control-label col-xs-4 col-sm-2 col-md-2 col-lg-3" />
+                                            <apex:outputPanel layout="block" styleClass="col-xs-8 col-sm-10 col-md-10 col-lg-6">
+                                                <apex:inputFile accept="image/jpeg, image/png, image/gif" id="thefile" contentType="{!contentType}" fileName="{!fileName}" 
+                                                                fileSize="{!fileSize}" value="{!fileBody}" styleClass="form-file"/>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+                                    </div>
+                                </div> <!-- close form ROW -->
+
+                                <!-- PHONE IMAGE -->
+                                <apex:outputPanel layout="block" styleClass="simple-sms-bootstrap col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <apex:outputPanel styleClass="phone-image-container" layout="block">
+                                        <apex:outputPanel layout="block" styleClass="phone-text-container"></apex:outputPanel>
+                                        <apex:outputPanel layout="block" styleClass="phone-text-image-container"></apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel layout="block" style="max-width:230px; font-size:.75em; padding:0px 0px 0px 60px;">
+                                        <p>* Thumbnails in this preview may look disproportionate. Actual images are optimized for mobile devices when delivered.</p>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </apex:outputPanel>
+        </apex:form>
+    </apex:outputPanel>
+    
+    <!-- JQuery -->
+    <apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, '/js/jquery-2.1.1.min.js')}" />
+    <apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, '/js/bootstrap.min.js')}" />
+    
+    <script type="text/javascript">
+        var j$ = jQuery.noConflict();
+        
+        j$( document ).ready( function() { 
+              j$( "#loading-template" ).hide();
+              j$( ".form-file" ).hide().change( handleAddPhoto );
+              j$( "#removePhotoBtn" ).hide();
+              setupButtons();
+              if( {!success} ) disableAllInputs();
+
+              j$( '.sendBtn' )
+                 .attr( 'data-loading-text', 'Sending...' )
+                 .attr( 'autocomplete', 'off' )
+                 .on( 'click', function( e ) { 
+                  j$( this ).button( 'loading' );
+                 });
+        });
+
+        // set button classes
+        function setupButtons()
+        {
+            //j$( ".theform :input:submit" ).attr( 'class', 'btn btn-primary btn-sm' );
+            j$( "#addPhotoBtn" ).hover( function() { j$( "#addPhotoBtn span.glyphicon" ).addClass('blue') }, 
+                                        function() { j$( "#addPhotoBtn span.glyphicon" ).removeClass('blue')} )
+                                .click( function() {
+                                            j$( ".form-file" ).click();
+            });
+            j$( "#removePhotoBtn" ).click( function() { 
+                handleRemovePhoto();
+            });
+        }
+        
+        function handleMessageInput( msg )
+        {
+            wordCount( msg );
+            j$( ".phone-text-container" ).html( msg );
+        }
+        
+        // keeps track of the number of remaining words allowed.
+        function wordCount( msg ) {
+            var wordsleft = 160;
+            if( ( wordsleft -= msg.length ) < 0 ) {
+               j$( "#wordsleft" ).attr( 'class', 'label label-danger' );
+            } else {
+               j$( "#wordsleft" ).attr( 'class', 'label label-success' );
+            }
+            j$( "#wordsleft" ).text( wordsleft );
+        }
+        
+        function disableAllInputs()
+        {
+            j$( ".form-horizontal :input:not(:submit)" ).each( function() {
+                j$( this ).attr( 'disabled', 'true' ).addClass( 'disabled' );
+            });
+        }
+
+        function refreshMessageRemote()
+        {
+            j$( "#loading-template" ).show();
+
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.SimpleSMSSendController.refreshMessageRemote}',
+                '{!param}',
+                j$( ".form-template" ).val(), 
+                function( result, event ){
+                    j$( "#loading-template" ).hide();
+                    if( event.status ) {
+                        j$( ".form-message" ).val( result );
+                        j$( ".phone-text-container" ).html( result );
+                        wordCount( result );
+                    } else if (event.type === 'exception') {
+                        console.log( event.message );
+                    } else {
+                        console.log( event.message );
+                    }
+                },
+                { escape: false }
+            );
+        }
+
+        function handleAddPhoto( evt )
+        {
+            j$( "#addPhotoBtn" ).hide();
+            j$( "#removePhotoBtn" ).insertBefore( "#filename" ).show();
+
+            filename = j$( ".form-file" ).val();
+            j$( '#filename' ).text( filename );
+
+            loadPhotoPreview( evt );
+        }
+
+        function loadPhotoPreview( evt )
+        {
+            var file = evt.target.files[evt.target.files.length - 1];
+            var reader = new FileReader();
+             
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    imageURL = reader.result;
+                    j$( ".phone-text-image-container" ).append( '<img width="105px" height="105px" src="' + imageURL + '" />' );
+                };
+            })(file);
+
+            reader.readAsDataURL(file);
+        }
+
+        function handleRemovePhoto()
+        {
+            j$( "#removePhotoBtn" ).hide();
+            j$( "#addPhotoBtn" ).show();
+            j$( "#filename" ).text( '' );
+            j$( ".form-file" ).val( null );
+            j$( ".phone-text-image-container" ).empty();
+        }
+    </script>
+</apex:page>

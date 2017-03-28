@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Enforce_Single_Conversation__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Check this box if a Lead/Contact can only receive the auto responses one time.  When this is unchecked, the Lead/Contact will receive the auto response each time they text the keyword.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box if a Lead/Contact can only receive the auto responses one time.  When this is unchecked, the Lead/Contact will receive the auto response each time they text the keyword.</inlineHelpText>
+        <label>Enforce Single Conversation</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Phone_Number_Display__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Display the related Phone Number digits.</description>
+        <externalId>false</externalId>
+        <formula>Phone_Number__r.PhoneNumber__c</formula>
+        <inlineHelpText>Display the related Phone Number digits.</inlineHelpText>
+        <label>Phone Number (Display)</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The phone number associated with this campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The phone number associated with this campaign.</inlineHelpText>
+        <label>Phone Number</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>PhoneNumber__c.Available_for_Campaign__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>true</isOptional>
+        </lookupFilter>
+        <referenceTo>PhoneNumber__c</referenceTo>
+        <relationshipLabel>Campaigns</relationshipLabel>
+        <relationshipName>Campaigns</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Prevent_Conflict__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A uniqueness field that will prevent two Active Campaigns from using the same phone number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A uniqueness field that will prevent two Active Campaigns from using the same phone number.</inlineHelpText>
+        <label>Prevent Conflict</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SMS_Keyword__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The keyword associated with this campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The keyword associated with this campaign.</inlineHelpText>
+        <label>SMS Keyword</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Scheduled__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The time for the next scheduled message.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time for the next scheduled message.</inlineHelpText>
+        <label>Scheduled</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Total_Response_Rules__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The total number of response rules for this Campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The total number of response rules for this Campaign.</inlineHelpText>
+        <label>Total Response Rules</label>
+        <summaryForeignKey>SMS_Campaign_Response_Rule__c.Campaign__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <validationRules>
+        <fullName>Do_Not_Use_Reserved_Keywords</fullName>
+        <active>true</active>
+        <description>A Campaign cannot use certain reserved keywords.</description>
+        <errorConditionFormula>IF( 
+   &quot;t&quot; = CASE( LOWER( SMS_Keyword__c )
+                 ,&quot;help&quot;
+                 ,&quot;t&quot;
+                 ,&quot;info&quot;
+                 ,&quot;t&quot;
+                 ,&quot;stop&quot;
+                 ,&quot;t&quot;
+                 ,&quot;end&quot;
+                 ,&quot;t&quot;
+                 ,&quot;quit&quot;
+                 ,&quot;t&quot;
+                 ,&quot;cancel&quot;
+                 ,&quot;t&quot;
+                 ,&quot;unsubscribe&quot;
+                 ,&quot;t&quot;
+                 ,&quot;f&quot; )
+   ,true
+   ,false
+)</errorConditionFormula>
+        <errorDisplayField>SMS_Keyword__c</errorDisplayField>
+        <errorMessage>This cannot be used as a keyword.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>SMS_Response_Rules</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>SMS Response Rules</masterLabel>
+        <openType>sidebar</openType>
+        <page>CampaignResponseRules</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Send_Mass_Text</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Send SMS</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/simplesms__CampaignSend?campaignId={!Campaign.Id}</url>
+    </webLinks>
+</CustomObject>

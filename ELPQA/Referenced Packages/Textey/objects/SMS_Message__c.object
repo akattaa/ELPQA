@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>Mobile_Layout</compactLayoutAssignment>
+    <compactLayouts>
+        <fullName>Mobile_Layout</fullName>
+        <fields>Name</fields>
+        <fields>Type__c</fields>
+        <fields>Message_Date__c</fields>
+        <fields>OwnerId</fields>
+        <label>Mobile Layout</label>
+    </compactLayouts>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The related account.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The related account.</inlineHelpText>
+        <label>Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>SMS Messages</relationshipLabel>
+        <relationshipName>SMSMessages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Bulk_Message__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>A flag that denotes whether this message was sent as part of a bulk message.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A flag that denotes whether this message was sent as part of a bulk message.</inlineHelpText>
+        <label>Bulk Message</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>CRM_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>An external identifier for the message.</description>
+        <externalId>true</externalId>
+        <inlineHelpText>An external identifier for the message.</inlineHelpText>
+        <label>CRM Id</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Campaign__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Campaign</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>SMS Messages</relationshipLabel>
+        <relationshipName>SMS_Messages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The related Case.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The related Case.</inlineHelpText>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipLabel>SMS Messages</relationshipLabel>
+        <relationshipName>SMS_Messages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Clicks__c</fullName>
+        <defaultValue>0</defaultValue>
+        <deprecated>false</deprecated>
+        <description>The number of times the tracked link(s) were clicked.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of times the tracked link(s) were clicked.</inlineHelpText>
+        <label>Clicks</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The related Contact.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The related Contact.</inlineHelpText>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>SMS Messages</relationshipLabel>
+        <relationshipName>SMS_Messages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Error_Message__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A description of the error.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A description of the error.</inlineHelpText>
+        <label>Error Message</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>First_Click__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The time of the first link click.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time of the first link click.</inlineHelpText>
+        <label>First Click</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>From_Num__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The phone number that originated the message.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The phone number that originated the message.</inlineHelpText>
+        <label>From</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>From_Phone__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The From number converted to a Phone field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The From number converted to a Phone field.</inlineHelpText>
+        <label>From Phone</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Hash__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <deprecated>false</deprecated>
+        <description>Deprecated.</description>
+        <externalId>true</externalId>
+        <inlineHelpText>Deprecated.</inlineHelpText>
+        <label>Hash</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>Is_Final_Response__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flags this message as the final response in an automated conversation.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flags this message as the final response in an automated conversation.</inlineHelpText>
+        <label>Is Final Response</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Last_Click__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The time of the last link click.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The time of the last link click.</inlineHelpText>
+        <label>Last Click</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Lead__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The related Lead.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The related Lead.</inlineHelpText>
+        <label>Lead</label>
+        <referenceTo>Lead</referenceTo>
+        <relationshipLabel>SMS Messages</relationshipLabel>
+        <relationshipName>SMS_Messages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Links_Clicked__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The URL for the clicked link(s).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The URL for the clicked link(s).</inlineHelpText>
+        <label>Links Clicked</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Media_Attachments__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The number of media attachments.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The number of media attachments.</inlineHelpText>
+        <label>Media Attachments</label>
+        <summaryForeignKey>Media__c.SMS_Message__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackTrending>false</trackTrending>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Message_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The date that this message was sent/received.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date that this message was sent/received.</inlineHelpText>
+        <label>Message Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Message_Full__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The full text of the message.  This is helpful when a message exceeds 255 characters.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The full text of the message which allows for greater than 255 characters.</inlineHelpText>
+        <label>Message (Full)</label>
+        <length>131072</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Message_Length__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The number of characters in this message.</description>
+        <externalId>false</externalId>
+        <formula>LEN( Message__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The number of characters in this message.</inlineHelpText>
+        <label>Message Length</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Message_Segments__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The number of messages that were consumed to send this message.  One message segment is consumed for each 160 characters.</description>
+        <externalId>false</externalId>
+        <formula>CEILING( Message_Length__c / 160 )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>The number of messages that were consumed to send this message.  One message segment is consumed for each 160 characters.</inlineHelpText>
+        <label>Message Segments</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Message__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The body of the message.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The body of the message.</inlineHelpText>
+        <label>Message</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The related Opportunity.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The related Opportunity.</inlineHelpText>
+        <label>Opportunity</label>
+        <referenceTo>Opportunity</referenceTo>
+        <relationshipLabel>SMS Messages</relationshipLabel>
+        <relationshipName>SMS_Messages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Short_Links__c</fullName>
+        <deprecated>false</deprecated>
+        <description>If this message contains tracked links the shortened version of each link is shown here.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this message contains tracked links the shortened version of each link is shown here.</inlineHelpText>
+        <label>Short Links</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Sid__c</fullName>
+        <deprecated>false</deprecated>
+        <description>An external identifer for this message.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>An external identifer for this message.</inlineHelpText>
+        <label>Sid</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The delivery status of this message.  Incoming messages are &quot;Received&quot;.  Outgoing messages are either &quot;Pending&quot;, &quot;Sent&quot;, &quot;Delivered&quot;, &quot;Undelivered&quot;, or &quot;Error&quot;.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The delivery status of this message.  Incoming messages are &quot;Received&quot;.  Outgoing messages are either &quot;Pending&quot;, &quot;Sent&quot;, &quot;Delivered&quot;, &quot;Undelivered&quot;, or &quot;Error&quot;.</inlineHelpText>
+        <label>Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Pending</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Received</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Replied</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Sent</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Delivered</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Undelivered</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Error</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>To_Phone__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The To number converted to a Phone field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The To number converted to a Phone field.</inlineHelpText>
+        <label>To Phone</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>To__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The phone number of the message recipient.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The phone number of the message recipient.</inlineHelpText>
+        <label>To</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The direction of this message.  The direction is either Outgoing or Incoming.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The direction of this message.  The direction is either Outgoing or Incoming.</inlineHelpText>
+        <label>Direction</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Incoming</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Outgoing</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The related User.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The related User.</inlineHelpText>
+        <label>User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>SMS_Messages</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>SMS Message</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>Contact__c</columns>
+        <columns>Lead__c</columns>
+        <columns>Message__c</columns>
+        <columns>Message_Date__c</columns>
+        <columns>Type__c</columns>
+        <columns>Status__c</columns>
+        <columns>Error_Message__c</columns>
+        <columns>To__c</columns>
+        <columns>From_Num__c</columns>
+        <columns>NAME</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>My_Incoming_Messages</fullName>
+        <columns>Message_Date__c</columns>
+        <columns>Message__c</columns>
+        <columns>Message_Full__c</columns>
+        <columns>Media_Attachments__c</columns>
+        <columns>NAME</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>Type__c</field>
+            <operation>equals</operation>
+            <value>Incoming</value>
+        </filters>
+        <label>My Incoming Messages</label>
+    </listViews>
+    <listViews>
+        <fullName>My_Unreplied_Messages</fullName>
+        <columns>Message_Date__c</columns>
+        <columns>Message_Full__c</columns>
+        <columns>Account__c</columns>
+        <columns>Contact__c</columns>
+        <columns>Status__c</columns>
+        <columns>From_Phone__c</columns>
+        <columns>To_Phone__c</columns>
+        <columns>NAME</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>Type__c</field>
+            <operation>equals</operation>
+            <value>Incoming</value>
+        </filters>
+        <filters>
+            <field>Status__c</field>
+            <operation>notEqual</operation>
+            <value>Replied</value>
+        </filters>
+        <label>My Unreplied Messages</label>
+    </listViews>
+    <nameField>
+        <displayFormat>SMS-{00000}</displayFormat>
+        <label>SMS Message Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>SMS Messages</pluralLabel>
+    <searchLayouts>
+        <excludedStandardButtons>New</excludedStandardButtons>
+        <excludedStandardButtons>ChangeOwner</excludedStandardButtons>
+        <listViewButtons>Reply_List</listViewButtons>
+        <searchResultsAdditionalFields>Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Message_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Message__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <webLinks>
+        <fullName>Reply</fullName>
+        <availability>online</availability>
+        <description>Reply to a message from the SMS Message detail page.</description>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Reply</masterLabel>
+        <openType>sidebar</openType>
+        <page>ReplyFromMessage</page>
+        <protected>false</protected>
+    </webLinks>
+    <webLinks>
+        <fullName>Reply_List</fullName>
+        <availability>online</availability>
+        <description>Reply to a message from a list.</description>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Reply</masterLabel>
+        <openType>sidebar</openType>
+        <page>ReplyFromMessageList</page>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+    </webLinks>
+    <webLinks>
+        <fullName>Resend_Message</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Resend Message</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/31.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/31.0/apex.js&quot;)} 
+
+var c = confirm( &quot;Do you want to resend this message?&quot; )
+
+if( c ) {
+   var result = sforce.apex.execute( &quot;simplesms/SmsMessagesWebservice&quot;
+                                   ,&quot;resendMessage&quot;
+                                   ,{messageId:&quot;{!SMS_Message__c.Id}&quot;} );
+   alert( result )
+   location.reload();
+}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Resend_Messages</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Resend Messages</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/31.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/31.0/apex.js&quot;)} 
+
+var c = confirm( &quot;Do you want to resend these messages?&quot; )
+
+if( c ) {
+   var ids = {!GETRECORDIDS( $ObjectType.SMS_Message__c )};
+   var result = &apos;&apos;;
+
+   if( ids.length ) {
+      result = sforce.apex.execute( &quot;simplesms/SmsMessagesWebservice&quot;
+                                   ,&quot;resendMessages&quot;
+                                   ,{messageIds:ids} );
+      alert( result )
+      location.reload();
+   } else {
+      alert( &quot;You did not select any messages.&quot; );
+   }
+}</url>
+    </webLinks>
+</CustomObject>

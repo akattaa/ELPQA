@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>NewSmsTemplate</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>NewSmsTemplate</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>A template that can be used to send messages to recipients.  The templates contain merge fields that allow the content to be set dynamically much like email templates.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Body__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The body of the message that will be sent.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The body of the message that will be sent.</inlineHelpText>
+        <label>Body</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Code__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <deprecated>false</deprecated>
+        <description>A system-generated unique identifier for this template.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A system-generated unique identifier for this template.</inlineHelpText>
+        <label>Code</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
+        <fullName>From_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>When this template is used with a workflow rule, this identifies the originating phone number.</description>
+        <externalId>false</externalId>
+        <formula>Phone_Number__r.PhoneNumber__c</formula>
+        <inlineHelpText>When this template is used with a workflow rule, this identifies the originating phone number.</inlineHelpText>
+        <label>From Number</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsActive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>The template is available for use.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The template is available for use.</inlineHelpText>
+        <label>Active</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Object__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The name of the SObject that this template can be used for.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The name of the SObject that this template can be used for.</inlineHelpText>
+        <label>Object</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone_Field__c</fullName>
+        <deprecated>false</deprecated>
+        <description>When this template is used with a workflow rule, this identifies the phone number field on the related object to use as the recipient phone number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When this template is used with a workflow rule, this identifies the phone number field on the related object to use as the recipient phone number.</inlineHelpText>
+        <label>Phone Field</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>A lookup to the related phone number.  When used with a workflow rule this will be the originating phone number.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A lookup to the related phone number.  When used with a workflow rule this will be the originating phone number.</inlineHelpText>
+        <label>Phone Number</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>PhoneNumber__c.IsActive__c</field>
+                <operation>equals</operation>
+                <value>True</value>
+            </filterItems>
+            <isOptional>true</isOptional>
+        </lookupFilter>
+        <referenceTo>PhoneNumber__c</referenceTo>
+        <relationshipLabel>SMS Templates</relationshipLabel>
+        <relationshipName>SMS_Templates</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <label>SMS Template</label>
+    <listViews>
+        <fullName>Account_Templates</fullName>
+        <columns>NAME</columns>
+        <columns>IsActive__c</columns>
+        <columns>Code__c</columns>
+        <columns>Body__c</columns>
+        <columns>Phone_Field__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Object__c</field>
+            <operation>equals</operation>
+            <value>Account</value>
+        </filters>
+        <label>Account Templates</label>
+    </listViews>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>IsActive__c</columns>
+        <columns>Object__c</columns>
+        <columns>Code__c</columns>
+        <columns>Body__c</columns>
+        <columns>Phone_Field__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>Contact_Templates</fullName>
+        <columns>NAME</columns>
+        <columns>IsActive__c</columns>
+        <columns>Code__c</columns>
+        <columns>Body__c</columns>
+        <columns>Phone_Field__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Object__c</field>
+            <operation>equals</operation>
+            <value>Contact</value>
+        </filters>
+        <label>Contact Templates</label>
+    </listViews>
+    <listViews>
+        <fullName>Lead_Templates</fullName>
+        <columns>NAME</columns>
+        <columns>IsActive__c</columns>
+        <columns>Code__c</columns>
+        <columns>Body__c</columns>
+        <columns>Phone_Field__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Object__c</field>
+            <operation>equals</operation>
+            <value>Lead</value>
+        </filters>
+        <label>Lead Templates</label>
+    </listViews>
+    <listViews>
+        <fullName>Opportunity_Templates</fullName>
+        <columns>NAME</columns>
+        <columns>IsActive__c</columns>
+        <columns>Code__c</columns>
+        <columns>Body__c</columns>
+        <columns>Phone_Field__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Object__c</field>
+            <operation>equals</operation>
+            <value>Opportunity</value>
+        </filters>
+        <label>Opportunity Templates</label>
+    </listViews>
+    <nameField>
+        <label>SMS Template Name</label>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>SMS Templates</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

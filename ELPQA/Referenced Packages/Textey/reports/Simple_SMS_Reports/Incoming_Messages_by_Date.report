@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>SMS_Message__c.Contact__c</field>
+    </columns>
+    <columns>
+        <field>SMS_Message__c.Lead__c</field>
+    </columns>
+    <columns>
+        <field>SMS_Message__c.Message__c</field>
+    </columns>
+    <columns>
+        <field>SMS_Message__c.Status__c</field>
+    </columns>
+    <description>Weekly view of Incoming messages.</description>
+    <filter>
+        <criteriaItems>
+            <column>SMS_Message__c.Type__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Incoming</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Week</dateGranularity>
+        <field>SMS_Message__c.Message_Date__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Incoming Messages by Date</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$SMS_Message__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>SMS_Message__c.First_Click__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

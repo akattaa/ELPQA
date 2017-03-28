@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>DeDupUtil</members>
+        <members>LogsUtil</members>
+        <members>RawContactDeDupBatch</members>
+        <members>RawContactBatchCtrlTest</members>
+        <members>RawContactBatchCtrl</members>
+        <members>RawContactDeDupBatchTst</members>
+        <members>SourceUtil</members>
+        <members>SourceWrapper</members>
+        <members>WrapperDedup</members>
+        <members>WrapperDedupTest</members>
+        <name>ApexClass</name>
+    </types>
+    <version>38.0</version>
+</Package>

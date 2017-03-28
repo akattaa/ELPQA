@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <content>OverrideSmsCampaignResponseRule</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <content>OverrideSmsCampaignResponseRule</content>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Visualforce</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>A rule that defines how to respond to an incoming SMS message that is related to a campaign.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>false</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Auto_Response_Message_Contact__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The message from the Auto Response Template for Contacts.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The message from the Auto Response Template for Contacts.</inlineHelpText>
+        <label>Auto Response Message Contact</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Auto_Response_Message_Lead__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The message from the Auto Response Template for Leads.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The message from the Auto Response Template for Leads.</inlineHelpText>
+        <label>Auto Response Message Lead</label>
+        <length>32768</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Auto_Response_Template_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The template to use when replying to a Contact.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The template to use when replying to a Contact.</inlineHelpText>
+        <label>Auto Response Template (Contact)</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>SMS_Template__c.Object__c</field>
+                <operation>equals</operation>
+                <value>Contact</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>SMS_Template__c</referenceTo>
+        <relationshipLabel>SMS Campaign Response Rules Contacts</relationshipLabel>
+        <relationshipName>SMS_Campaign_Response_Rules_Contacts</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Auto_Response_Template_Lead__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The template used when replying to a Lead.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The template used when replying to a Lead.</inlineHelpText>
+        <label>Auto Response Template (Lead)</label>
+        <lookupFilter>
+            <active>true</active>
+            <filterItems>
+                <field>SMS_Template__c.Object__c</field>
+                <operation>equals</operation>
+                <value>Lead</value>
+            </filterItems>
+            <isOptional>false</isOptional>
+        </lookupFilter>
+        <referenceTo>SMS_Template__c</referenceTo>
+        <relationshipLabel>SMS Campaign Response Rules Leads</relationshipLabel>
+        <relationshipName>SMS_Campaign_Response_Rules_Leads</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Campaign__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The Campaign these rules correspond to.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Campaign these rules correspond to.</inlineHelpText>
+        <label>Campaign</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>SMS Campaign Response Rules</relationshipLabel>
+        <relationshipName>SMS_Campaign_Response_Rules</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <reparentableMasterDetail>false</reparentableMasterDetail>
+        <trackTrending>false</trackTrending>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Is_Final_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <description>True if this is the final response in the sequence.</description>
+        <externalId>false</externalId>
+        <formula>Campaign__r.Total_Response_Rules__c = Sequence__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>True if this is the final response in the sequence.</inlineHelpText>
+        <label>Is Final Response</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Save_Response_Contact__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The name of the Contact field where the SMS Message body will be saved.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The name of the Contact field where the SMS Message body will be saved.</inlineHelpText>
+        <label>Save Response (Contact)</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Save_Response_Lead__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The name of the Lead field where the SMS Message body will be saved.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The name of the Lead field where the SMS Message body will be saved.</inlineHelpText>
+        <label>Save Response (Lead)</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sequence__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The order that this rule is executed within the list of rules for this Campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The order that this rule is executed within the list of rules for this Campaign.</inlineHelpText>
+        <label>Sequence</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>SMS Campaign Response Rule</label>
+    <nameField>
+        <displayFormat>Rule-{0000}</displayFormat>
+        <label>SMS Campaign Response Rule Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>SMS Campaign Response Rules</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>All_Fields_Cannot_be_Blank</fullName>
+        <active>true</active>
+        <description>All fields cannot be blank.</description>
+        <errorConditionFormula>AND( 
+    ISBLANK( Save_Response_Lead__c )
+   ,ISBLANK( Save_Response_Contact__c )
+   ,ISBLANK( Auto_Response_Template_Lead__c )
+   ,ISBLANK( Auto_Response_Template_Contact__c )
+)</errorConditionFormula>
+        <errorMessage>This rule doesn&apos;t do anything.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Sequence_Cannot_be_Null</fullName>
+        <active>true</active>
+        <description>The Sequence must be populated.</description>
+        <errorConditionFormula>ISBLANK( Sequence__c )</errorConditionFormula>
+        <errorDisplayField>Sequence__c</errorDisplayField>
+        <errorMessage>Sequence cannot be blank.</errorMessage>
+    </validationRules>
+</CustomObject>

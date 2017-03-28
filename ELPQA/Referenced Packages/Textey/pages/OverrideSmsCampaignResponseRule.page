@@ -1,0 +1,51 @@
+<apex:page standardcontroller="simplesms__SMS_Campaign_Response_Rule__c" extensions="simplesms.Ctrl_SmsCampaignResponseRule" 
+           showHeader="true" sidebar="true">
+	<apex:form >
+		<apex:pageBlock >
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton value="Save" action="{!saveRule}" />
+				<apex:commandButton value="Cancel" action="{!cancel}" />
+			</apex:pageBlockButtons>
+
+			<apex:pageBlockSection title="Rule Info" columns="2">
+				<apex:pageBlockSectionItem helpText="The order that this rule will run. For example, the rule with Sequence 1 will run when the first response is received.">
+					<apex:outputLabel value="Order" />
+					<apex:inputField value="{!rule.simplesms__Sequence__c}" />
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Campaign" />
+					<apex:outputField value="{!rule.simplesms__Campaign__c}" />
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="Lead Response Info" columns="2">
+				<apex:pageBlockSectionItem helpText="The auto response sent to a Lead.">
+					<apex:outputLabel value="Auto Response Template (Lead)" />
+					<apex:inputField value="{!rule.simplesms__Auto_Response_Template_Lead__c}" />
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem helpText="Save the Lead's response in this field.">
+					<apex:outputLabel value="Save Response (Lead)" />
+					<apex:selectList value="{!leadField}" size="1">
+						<apex:selectOptions value="{!leadFields}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="Contact Response Info" columns="2">
+				<apex:pageBlockSectionItem helpText="The auto response sent to a Contact.">
+					<apex:outputLabel value="Auto Response Template (Contact)" />
+					<apex:inputField value="{!rule.simplesms__Auto_Response_Template_Contact__c}" />
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem helpText="Save the Contact's response in this field.">
+					<apex:outputLabel value="Save Response (Contact)" />
+					<apex:selectList value="{!contactField}" size="1">
+						<apex:selectOptions value="{!contactFields}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

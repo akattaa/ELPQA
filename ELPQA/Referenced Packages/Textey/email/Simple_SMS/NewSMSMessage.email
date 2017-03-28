@@ -1,0 +1,5 @@
+You have a new text message from {!SMS_Message__c.Contact__c} {!SMS_Message__c.Lead__c}.
+
+Message: "{!SMS_Message__c.Message__c}"
+
+{!SMS_Message__c.Link}

@@ -1,0 +1,35 @@
+<apex:page showHeader="false" sidebar="false">
+    
+    <!-- Styling -->
+    <apex:styleSheet value="{!URLFOR($Resource.simplesms__SimpleSMS, 'simplesms/css/bootstrap.css' )}" /> 
+    <style>
+        .constheight { height:150px; }
+    </style>
+    <apex:outputPanel layout="block" styleClass="row">
+        <apex:outputPanel layout="block" styleClass="span12">
+            <h1>Do you have a Twilio account?</h1>
+        </apex:outputPanel>
+    </apex:outputPanel>
+    
+    <apex:outputPanel layout="block" styleClass="row" style="margin-top:20px">
+        <apex:outputPanel layout="block" styleClass="span6 well constheight">
+            <h2>Yes, I Have a Twilio Account.</h2>
+            <p style="padding-top:20px">Great, just click the <span class="label label-info">Don't Show This Page Again</span> button below.</p>
+            <p>You'll need to enter a few of your Twilio credentials on the next page.</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="span6 well constheight">
+            <h2>No, I Don't Have a Twilio Account.</h2>
+            <p style="padding-top:20px">No sweat, head on over to <a href="https://www.twilio.com/try-twilio" target="_blank">twilio.com/try-twilio</a> and sign up for a free account.</p>
+            <p>Once you've done that come back here to finish up.</p>
+        </apex:outputPanel>
+    </apex:outputPanel>
+    
+    <!-- Javascript -->
+    <apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, 'simplesms/js/jquery-1.7.2.min.js')}" />
+    
+    <script type="text/javascript">
+        j$ = jQuery.noConflict();
+        
+    </script>
+
+</apex:page>

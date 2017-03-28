@@ -1,0 +1,59 @@
+<!--
+ * FLYWHEEL ENTERPRISES CONFIDENTIAL
+ * __________________________________
+ * 
+ *  [2009] - [2014] Flywheel Enterprises, LLC
+ *  All Rights Reserved.
+ * 
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Flywheel Enterprises, LLC and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Flywheel Enterprises, LLC
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Flywheel Enterprises, LLC.
+ *
+ * 
+ * Visualforce page that displays media associated with an SMS Message.
+ *
+-->
+<apex:page standardcontroller="simplesms__SMS_Message__c" extensions="simplesms.Ctrl_MediaViewer"
+           standardStylesheets="false" showHeader="false" applyHtmlTag="false" docType="html-5.0">
+    <html>
+        <head>
+        	<meta name="viewport" content="width=device-width, initial-scale=1" />
+        	<apex:styleSheet value="{!URLFOR($Resource.simplesms__SimpleSMS, '/css/bootstrap.min.css' )}" />
+
+        	<style>
+	        	#media-container {
+	        		overflow:scroll;
+	        	}
+	        	#image-badge {
+	        		margin: 5px 0px 10px 18px;
+	        	}
+        	</style>
+        </head>
+
+        <body>
+        	<apex:outputPanel layout="block" styleClass="container-fluid">
+        		<apex:outputPanel layout="block" styleClass="row">
+        			<div id="image-badge">
+        				<a href="#">Images <span class="badge">{!media.size}</span></a>
+        			</div>
+        			<apex:outputPanel id="media-container" layout="block" styleClass="col-xs-12 col-sm-12 col-md-12">
+        				<apex:repeat value="{!media}" var="m">
+        					<a href="#" class="thumbnail">
+        						<apex:image value="{!m.simplesms__Media_Url__c}" styleClass="img-responsive" />
+        					</a>
+        					<hr />
+        				</apex:repeat>
+        			</apex:outputPanel>
+        		</apex:outputPanel>
+        	</apex:outputPanel>
+        </body>
+        <!-- JQuery -->
+    	<apex:includeScript value="{!URLFOR( $Resource.simplesms__SimpleSMS, '/js/jquery-2.1.1.min.js')}" />
+    </html>
+</apex:page>

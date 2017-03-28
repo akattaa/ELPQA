@@ -1,0 +1,25 @@
+<!--
+ * FLYWHEEL ENTERPRISES CONFIDENTIAL
+ * __________________________________
+ * 
+ *  [2009] - [2014] Flywheel Enterprises, LLC
+ *  All Rights Reserved.
+ * 
+ * NOTICE:  All information contained herein is, and remains
+ * the property of Flywheel Enterprises, LLC and its suppliers,
+ * if any.  The intellectual and technical concepts contained
+ * herein are proprietary to Flywheel Enterprises, LLC
+ * and its suppliers and may be covered by U.S. and Foreign Patents,
+ * patents in process, and are protected by trade secret or copyright law.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Flywheel Enterprises, LLC.
+ *
+ * 
+ * Visualforce page that enables sending SMS to a Contact.  This page should be 
+ * used as a Publisher Action.
+ *
+-->
+<apex:page standardcontroller="Contact" standardStylesheets="false" showHeader="false" docType="html-5.0" applyHtmlTag="false" applyBodyTag="false">
+    <c:ActionSendComponent target="{!Contact.Id}" defaultphone="Mobile_Phone" />
+</apex:page>

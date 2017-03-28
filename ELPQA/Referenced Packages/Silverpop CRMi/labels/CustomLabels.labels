@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>lbl_back</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_back</shortDescription>
+        <value>Back</value>
+    </labels>
+    <labels>
+        <fullName>lbl_body</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_body</shortDescription>
+        <value>Body</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg1</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>lbl_campaign_msg1</shortDescription>
+        <value>This Campaign is already associated with a Silverpop Sent Email. Create a new Campaign to send another Silverpop Email.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg2</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>lbl_campaign_msg2</shortDescription>
+        <value>This Campaign must have at least one member before an email can be sent.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg_1</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_campaign_msg_1</shortDescription>
+        <value>Email could not be sent to {0} of the campaign members because the record does not exist in or have been deleted from Silverpop database.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg_2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_campaign_msg_2</shortDescription>
+        <value>Email could not be sent because the {0} does not exist in or has been deleted from Silverpop database.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg_3</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_campaign_msg_3</shortDescription>
+        <value>Email could not be sent to {0} campaign member because the record does not exist in or have been deleted from Silverpop database.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg_4</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_campaign_msg_4</shortDescription>
+        <value>Email could not be sent to {0} campaign members because Silverpop has been unsuccessful sending to them previously.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_msg_noemail</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_campaign_msg_noemail</shortDescription>
+        <value>Email could not be sent to {0} of the campaign members because they do not have a valid email address in Silverpop database.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_campaign_optout_msg</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_campaign_optout_msg</shortDescription>
+        <value>Email could not be sent to {0} of the campaign members because they have Opted Out from email from Silverpop.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_cancel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>lbl_cancel_msg</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_cancel_msg</shortDescription>
+        <value>You are about to cancel.  Are you sure you wish to continue?</value>
+    </labels>
+    <labels>
+        <fullName>lbl_conn_timeout</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_conn_timeout</shortDescription>
+        <value>The connection with Silverpop has timed out. Check with your Silverpop Administrator to confirm your mailing was sent successfully before attempting to send again.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_crm_directory</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_crm_directory</shortDescription>
+        <value>CRM Directory in Online Help</value>
+    </labels>
+    <labels>
+        <fullName>lbl_crm_solutions</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_crm_solutions</shortDescription>
+        <value>CRM Solutions Page on Silverpop Support Portal</value>
+    </labels>
+    <labels>
+        <fullName>lbl_date_time</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_date_time</shortDescription>
+        <value>Date/Time</value>
+    </labels>
+    <labels>
+        <fullName>lbl_default_subject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_default_subject</shortDescription>
+        <value>Default Subject</value>
+    </labels>
+    <labels>
+        <fullName>lbl_email_processed</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_email_processed</shortDescription>
+        <value>Your email has been submitted and will be processed according to your settings.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_from</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_from</shortDescription>
+        <value>From</value>
+    </labels>
+    <labels>
+        <fullName>lbl_from_address</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_from_address</shortDescription>
+        <value>From Address</value>
+    </labels>
+    <labels>
+        <fullName>lbl_gettingstarted</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_gettingstarted</shortDescription>
+        <value>&lt;p&gt;Then access the &lt;b&gt;{0} Silverpop for Salesforce Getting Started Guide&lt;/a&gt;&lt;/b&gt;. &lt;i&gt;&lt;b&gt;Note:&lt;/b&gt; You must be logged on BEFORE &lt;br&gt;accessing the link; otherwise, the file will not open properly.&lt;/i&gt; &lt;/p&gt;</value>
+    </labels>
+    <labels>
+        <fullName>lbl_help1</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_help1</shortDescription>
+        <value>You can also obtain detailed CRM information in our online help system. Log on to Silverpop Engage, click the Help link (upper-right area of any page after logging on, as shown in the image below) and select the Online Help option.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_help2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_help2</shortDescription>
+        <value>Once there, use the directory tree in the left column to navigate to the CRM folder.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_help3</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_help3</shortDescription>
+        <value>For information not contained in the above-referenced guide, contact Silverpop Customer Support at 1-866-SILVPOP (866-745-8767).</value>
+    </labels>
+    <labels>
+        <fullName>lbl_input_validation</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_input_validation</shortDescription>
+        <value>You must enter a value</value>
+    </labels>
+    <labels>
+        <fullName>lbl_knowledge_link</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_knowledge_link</shortDescription>
+        <value>&lt;a href=&apos;http://portal.silverpop.com/Portal/www/knowledgebase.php?spage=article&amp;cId=02n0000000000QAAAY&amp;sId=5010000000070srAAA&apos; target=&apos;_blank&apos;&gt;</value>
+    </labels>
+    <labels>
+        <fullName>lbl_loading</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_loading</shortDescription>
+        <value>Loading...</value>
+    </labels>
+    <labels>
+        <fullName>lbl_mailing_note</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_mailing_note</shortDescription>
+        <value>NOTE: under this option, the mailing will be scheduled based on the current records in the database at the time of scheduling.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_msg_information</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_msg_information</shortDescription>
+        <value>Message Information</value>
+    </labels>
+    <labels>
+        <fullName>lbl_next</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_next</shortDescription>
+        <value>Next</value>
+    </labels>
+    <labels>
+        <fullName>lbl_no_template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_no_template</shortDescription>
+        <value>No Template Id</value>
+    </labels>
+    <labels>
+        <fullName>lbl_nomessage_template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_nomessage_template</shortDescription>
+        <value>The Template you selected does not allow a message to be added.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_ok</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_ok</shortDescription>
+        <value>OK</value>
+    </labels>
+    <labels>
+        <fullName>lbl_online_help</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_online_help</shortDescription>
+        <value>Online Help Menu - Engage</value>
+    </labels>
+    <labels>
+        <fullName>lbl_personal_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_personal_message</shortDescription>
+        <value>Personal Message</value>
+    </labels>
+    <labels>
+        <fullName>lbl_personalization</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_personalization</shortDescription>
+        <value>Insert Personalization</value>
+    </labels>
+    <labels>
+        <fullName>lbl_preview</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_preview</shortDescription>
+        <value>Preview</value>
+    </labels>
+    <labels>
+        <fullName>lbl_processing_message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_processing_message</shortDescription>
+        <value>Processing Message...</value>
+    </labels>
+    <labels>
+        <fullName>lbl_rendering_preview</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_rendering_preview</shortDescription>
+        <value>Rendering Preview...</value>
+    </labels>
+    <labels>
+        <fullName>lbl_reply_to_address</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_reply_to_address</shortDescription>
+        <value>Reply-To Address</value>
+    </labels>
+    <labels>
+        <fullName>lbl_req_personalmessage</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_req_personalmessage</shortDescription>
+        <value>*- Allows a personal message to be added.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_retrieve_templates</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_retrieve_templates</shortDescription>
+        <value>Retrieving Templates...</value>
+    </labels>
+    <labels>
+        <fullName>lbl_same_domain</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_same_domain</shortDescription>
+        <value>It is recommended that the same domain be used for the From and Reply to Emails to avoid being blocked by ISPs.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_select_mailing_folder</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_select_mailing_folder</shortDescription>
+        <value>Select Mailing Folder</value>
+    </labels>
+    <labels>
+        <fullName>lbl_select_mailing_template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_select_mailing_template</shortDescription>
+        <value>Select Mailing Template</value>
+    </labels>
+    <labels>
+        <fullName>lbl_send</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_send</shortDescription>
+        <value>Send</value>
+    </labels>
+    <labels>
+        <fullName>lbl_send_later</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_send_later</shortDescription>
+        <value>Send Later</value>
+    </labels>
+    <labels>
+        <fullName>lbl_send_now</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_send_now</shortDescription>
+        <value>Send Now</value>
+    </labels>
+    <labels>
+        <fullName>lbl_send_options</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_send_options</shortDescription>
+        <value>Send Options</value>
+    </labels>
+    <labels>
+        <fullName>lbl_send_silverpop_button</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_send_silverpop_button</shortDescription>
+        <value>If you are trying to send a Silverpop email, please click the Send Silverpop Email button.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_silverpop_logging</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_silverpop_logging</shortDescription>
+        <value>Logging into Silverpop...</value>
+    </labels>
+    <labels>
+        <fullName>lbl_silverpop_session</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_silverpop_session</shortDescription>
+        <value>There is no active Silverpop Session Id.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_silverpop_settings</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_silverpop_settings</shortDescription>
+        <value>has not been defined in Silverpop Settings.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_step1</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_step1</shortDescription>
+        <value>Step 1 - Select a template for your email</value>
+    </labels>
+    <labels>
+        <fullName>lbl_step2</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_step2</shortDescription>
+        <value>Step 2 - Compose your email</value>
+    </labels>
+    <labels>
+        <fullName>lbl_step3</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_step3</shortDescription>
+        <value>Step 3 - Preview your email</value>
+    </labels>
+    <labels>
+        <fullName>lbl_step4</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_step4</shortDescription>
+        <value>Step 4 - Confirmation</value>
+    </labels>
+    <labels>
+        <fullName>lbl_subject</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_subject</shortDescription>
+        <value>Subject</value>
+    </labels>
+    <labels>
+        <fullName>lbl_support_portal</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_support_portal</shortDescription>
+        <value>Support Portal Logon Page</value>
+    </labels>
+    <labels>
+        <fullName>lbl_supportportal</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_supportportal</shortDescription>
+        <value>For configuration information, log on to the Silverpop Support Portal</value>
+    </labels>
+    <labels>
+        <fullName>lbl_sync_templates</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_sync_templates</shortDescription>
+        <value>Sync Silverpop Templates</value>
+    </labels>
+    <labels>
+        <fullName>lbl_template_help</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_template_help</shortDescription>
+        <value>Templates for emails created in Silverpop Engage contain messages and images that cannot be altered.  preview will display for each template so you can select the appropriate one. Some templates allow you to add a personalized message (which can be completed in Step 2 - Compose your email.)</value>
+    </labels>
+    <labels>
+        <fullName>lbl_template_synced</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_template_synced</shortDescription>
+        <value>Silverpop Templates were successfully synced.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_thankyou</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_thankyou</shortDescription>
+        <value>Thank you for choosing Silverpop for Salesforce CRM Integration.</value>
+    </labels>
+    <labels>
+        <fullName>lbl_to</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_to</shortDescription>
+        <value>To</value>
+    </labels>
+    <labels>
+        <fullName>lbl_wait</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_wait</shortDescription>
+        <value>Wait......</value>
+    </labels>
+    <labels>
+        <fullName>lbl_whatis_template</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>lbl_whatis_template</shortDescription>
+        <value>What is a Template?</value>
+    </labels>
+</CustomLabels>

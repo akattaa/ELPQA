@@ -1,0 +1,291 @@
+<apex:page controller="silverpop.EngageSendEmailController" 
+    showHeader="false" 
+    tabStyle="SP_Select_Template__tab">
+     <apex:includeScript value="{!$Resource.silverpop__EngageJS}"/>
+     <apex:stylesheet value="{!$Resource.silverpop__EngageCSS}" />
+     <script type='text/javascript'> 
+        window.$Label = window.$Label || {};
+        $Label.CancelMsg = '{!JSENCODE($Label.lbl_cancel_msg)}';
+                
+     
+      //Puts the vaules in cookies when a user navigates back
+        function saveValues(subjectId, templateIdValue, fromNameId, replytoId, fromId){
+            if(document.getElementById(fromNameId) != null) {
+               var fromName = document.getElementById(fromNameId).value;
+             }
+            
+            var from = document.getElementById(fromId).value;
+            var replyto = document.getElementById(replytoId).value;
+
+            var subject = document.getElementById(subjectId).value;
+            setCookie('sp_subject', subject);
+            setCookie('sp_from', from);
+            setCookie('sp_replyto', replyto);
+            setCookie('sp_template', templateIdValue);
+            
+            if(document.getElementById(fromId) != null) {
+                setCookie('sp_fromname', fromName);
+            }
+        }
+        //displays warning message if user changes value
+        function checkEmail(fromId, replytoId){
+            
+            var from = document.getElementById(fromId).value;
+            var replyto = document.getElementById(replytoId).value;
+            
+            var fromdomain = from.split(/@/);
+            var replytodomain = replyto.split(/@/); 
+            if(fromdomain[1] != replytodomain[1]){
+                addEmailDomainWarning();
+            }
+        }
+        
+        function addPersonizationItem(metaDataItem){
+            
+            var personilzationItems = getCookie('sp_personilzation');
+            
+            if(personilzationItems == ''){
+                personilzationItems = metaDataItem;
+            }else{
+                personilzationItems = personilzationItems + ';' + metaDataItem;
+            }
+            
+            setCookie('sp_personilzation', personilzationItems);
+        }
+        
+        function displayDate(ddValue,dateDivId){
+            if(ddValue == 'SL'){
+                callPopUp();
+                document.getElementById(dateDivId).style.display = 'block';
+
+
+            } else {
+                document.getElementById(dateDivId).style.display = 'none';
+
+            }
+
+        }
+        
+        function copyParameterSubject(subject, columnName) {
+            
+            var subjectToInsert = document.getElementById(subject).value;
+            document.getElementById(subject).value = subjectToInsert+" %%"+columnName+"%%";
+           
+        }
+        
+        function copyParameterPersonalMessage(personalMessage, columnName) {
+            
+            var personalMessageToInsert = document.getElementById(personalMessage).value;
+            document.getElementById(personalMessage).value = personalMessageToInsert+" %%"+columnName+"%%";
+           
+        }        
+    </script>
+    <script type='text/javascript'>
+            var previousOnload = window.onload;        
+            window.onload = function() { 
+            if (previousOnload) { 
+                previousOnload();
+            }  
+            
+                //bind the cookies to the controller
+                bindLoadValues(
+                        getCookie('sp_esessionid'), 
+                        getCookie('sp_crmlistid'), 
+                        getCookie('sp_personalmsg'), 
+                        getCookie('sp_from'), 
+                        getCookie('sp_replyto'), 
+                        getCookie('sp_fromname')
+                );
+            }
+    </script>
+    <apex:form id="form">
+        <apex:pageMessages id="messages"/>
+        <apex:actionFunction name="bindLoadValues" action="{!bindLoadValuesCompose}" rerender="pbStep2,pbbButtons" status="loadingStatus">
+            <apex:param name="eSessionId" value="" /> 
+            <apex:param name="crmListId" value="" /> 
+            <apex:param name="personalmsg" value="" />
+            <apex:param name="from" value="" />
+            <apex:param name="replyto" value="" />
+            <apex:param name="fromname" value="" />
+            <apex:param name="personilzation" value="" />
+        </apex:actionFunction>
+        <apex:actionFunction name="addEmailDomainWarning" action="{!addEmailDomainWarning}" rerender="messages">
+        </apex:actionFunction>
+        <apex:actionStatus id="loadingStatus">
+            <apex:facet name="start">
+                <div class="loadingText">
+                    {!$Label.lbl_loading}                    
+                </div>
+                <div class="loadingText">
+                    <img src="{!$Resource.LoadingImg}" />
+                </div>
+            </apex:facet>
+            <apex:facet name="stop">
+                <apex:pageBlock id="pbStep2" title="{!$Label.lbl_step2}" rendered="{!NOT isError}">
+                    <apex:pageBlockSection title="{!$Label.lbl_msg_information}" columns="1" id="pbsMessageInfo">
+                        <apex:pageBlockSectionItem id="pbsiTo" labelStyleClass="messageInformationLabel" dataStyleClass="messageInformationData">
+                            <apex:outputLabel value="{!$Label.lbl_to}" for="to"/>
+                            <apex:outputText id="otTo" value="{!to}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="pbsiFromName" labelStyleClass="messageInformationLabel" dataStyleClass="messageInformationData">
+                            <apex:outputLabel value="{!$Label.lbl_from}" for="txtfrom"/>
+                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                            <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                <apex:inputText id="txtfrom" value="{!email.fromName}" maxlength="128" alt="{!$Label.lbl_from}" Title="{!$Label.lbl_from}"></apex:inputText>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="pbsiFromAddress" labelStyleClass="messageInformationLabel" dataStyleClass="messageInformationData">
+                            <apex:outputLabel value="{!$Label.lbl_from_address}" for="txtfromaddress"/>
+                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                            <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                <apex:inputText id="txtfromaddress" value="{!email.fromAddress}" onblur="checkEmail('{!$Component.txtfromaddress}', '{!$Component.pbsiReplyTo.txtreplyTo}')" ></apex:inputText>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                         <apex:pageBlockSectionItem id="pbsiReplyTo" labelStyleClass="messageInformationLabel" dataStyleClass="messageInformationData">
+                            <apex:outputLabel value="{!$Label.lbl_reply_to_address}" for="txtreplyTo" />
+                            <apex:outputPanel styleClass="requiredInput" layout="block">
+                            <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                <apex:inputText id="txtreplyTo" value="{!email.replyTo}" onblur="checkEmail('{!$Component.pbsiFromAddress.txtfromaddress}', '{!$Component.txtreplyTo}')"></apex:inputText>
+                            </apex:outputPanel>
+                         </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem id="pbsiSubject" labelStyleClass="messageInformationLabel" dataStyleClass="messageInformationData">
+                            <apex:outputLabel id="pbsiSubjectId" value="{!$Label.lbl_subject}" for="txtsubject"/> 
+                            <apex:outputPanel >
+                                <apex:outputPanel style="float:left;">
+                                    <apex:outputPanel styleClass="requiredInput" layout="block">
+                                    <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                        <apex:inputText id="txtsubject" value="{!email.subject}" size="70" maxlength="255"></apex:inputText>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                <apex:outputPanel layout="block" style="float:left;"> <!-- Personalization Button -->
+                                    <apex:commandButton value="{!$Label.lbl_personalization}" rerender="txtsubject" immediate="true"> 
+                                        <apex:actionSupport event="onclick"
+                                            action="{!flipMetadataSubVisible}"
+                                            rerender="hideSub, messages" status="counterStatus"/>
+                                    </apex:commandButton>
+                                    <apex:actionStatus id="counterStatus" startText=" {!$Label.lbl_wait}" />
+                                    <apex:outputpanel id="hideSub" styleClass="personalizationSub" layout="block" >
+                                        <apex:outputpanel rendered="{!isMetadataSubVisible}" layout="inline">
+                                            <ul>
+                                                <apex:repeat value="{!listMetaData.column}" var="c" id="tblSubMd" rendered="{!isMetadataSubVisible}" >
+                                                    <li>
+                                                        <apex:commandLink value="{!c.columnName}"  rerender="hideSub, txtsubject"
+                                                                                onClick="copyParameterSubject('{!$Component.form.pbStep2.pbsMessageInfo.pbsiSubject.txtsubject}','{!c.columnName}')">
+                                                            <apex:param name="c" value="{!c.columnName}"/> 
+                                                        </apex:commandLink>
+                                                    </li>  
+                                                </apex:repeat>
+                                            </ul>
+                                        </apex:outputpanel>
+                                    </apex:outputpanel>
+                                </apex:outputPanel> <!-- Personalization Button -->
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="{!$Label.lbl_personal_message}" columns="1" id="pbsPersonalMessage" rendered="{!allowCrm}">
+                        <apex:pageBlockSectionItem id="pbsiPersonalMessage">
+                            <apex:inputTextarea id="tapersonalMsg" value="{!personalMessage}" cols="75" rows="3" title="Personal Message"/>
+                        
+                            <apex:outputPanel ><!-- Personalization Button -->
+                                <apex:commandButton value="{!$Label.lbl_personalization}" rerender="tapersonalMsg" immediate="true">
+                                    <apex:actionSupport event="onclick"
+                                            action="{!flipMetadataPMVisible}" rerender="hidePM, messages" status="counterStatus2"/>
+                                </apex:commandButton>
+                                <apex:actionStatus id="counterStatus2" startText=" {!$Label.lbl_wait}" />
+                                <apex:outputpanel id="hidePM" styleClass="personalizationPm" layout="block" >
+                                    <apex:outputpanel rendered="{!isMetadataPMVisible}" layout="inline">
+                                        <ul>
+                                            <apex:repeat value="{!nonSystemColumns}" var="c" id="tblPMMD" rendered="{!isMetadataPMVisible}" >
+                                                <li>
+                                                    <apex:outputPanel > 
+                                                        <apex:commandLink value="{!c.columnName}" rerender="hidePM,tapersonalMsg" 
+                                                            onClick="copyParameterPersonalMessage('{!$Component.form.pbStep2.pbsPersonalMessage.pbsiPersonalMessage.tapersonalMsg}','{!c.columnName}')" >
+                                                            <apex:param name="c" value="{!c.columnName}"/>
+                                                        </apex:commandLink>
+                                                    </apex:outputPanel>
+                                                </li>
+                                            </apex:repeat>
+                                        </ul>
+                                    </apex:outputpanel>
+                                </apex:outputpanel>
+                            </apex:outputPanel><!-- Personalization Button -->
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="{!$Label.lbl_personal_message}" columns="1" id="pbsNoPersonalMessage" rendered="{!NOT allowCrm}">
+                        <apex:outputLabel value="{!$Label.lbl_nomessage_template}"/>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="{!$Label.lbl_send_options}" columns="1" id="pbsSendOptions">
+                        <apex:pageBlockSectionItem id="pbsiSendOptions" labelStyleClass="sendOptionsLabel" dataStyleClass="sendOptionsData">
+                            <apex:SelectList id="slsendOptions" size="1" value="{!options}" onchange="displayDate(this.value,'{!$Component.form.pbStep2.pbsSendOptions.pbsiSendOptions.opDate}')">
+                                <apex:selectOptions value="{!items}"/>
+                                <apex:actionFunction name="callPopUp" action="{!showPopup}" rerender="sendLaterPopUp" />
+
+
+
+                            </apex:SelectList>
+                            <apex:outputPanel id="opDate" style="{!IF(options == 'SL', 'display:block;', 'display:none;')}" layout="block">
+                                <apex:outputPanel style="float:left; width:60px;" layout="inline">
+                                    <apex:outputLabel id="lblDate" value="{!$Label.lbl_date_time}" for="txtDate"/>
+                                </apex:outputPanel>
+                                <apex:outputPanel styleClass="requiredInput" style="float:left;" layout="block">
+                                <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                                    <apex:inputField id="txtDate" value="{!spEmailPlaceholder.silverpop__Send_Date_Time__c}" ></apex:inputField>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockButtons location="bottom" id="pbbButtons">
+                        <apex:commandButton value="{!$Label.lbl_cancel}" onclick="return confirmCancel()" immediate="true"/> 
+                        <apex:commandButton action="{!backCompose}" value="{!$Label.lbl_back}" onclick="saveValues('{!$Component.form.pbStep2.pbsMessageInfo.pbsiSubject.txtsubject}','{!$CurrentPage.parameters.selectedTemplateId}', '{!$Component.form.pbStep2.pbsMessageInfo.pbsiFromName.txtFrom}', '{!$Component.form.pbStep2.pbsMessageInfo.pbsiReplyTo.txtreplyTo}', '{!$Component.form.pbStep2.pbsMessageInfo.pbsiFromAddress.txtfromaddress}')" immediate="true"/>
+                        <apex:commandButton id="btnPreview" action="{!previewCompose}" value="{!$Label.lbl_preview}"/>
+                        <apex:commandButton id="btnSend" action="{!sendCompose}" value="{!$Label.lbl_send}"/> 
+                    </apex:pageBlockButtons>
+                </apex:pageBlock>
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:outputPanel id="sendLaterPopUp">
+        <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+            <apex:outputPanel styleClass="custPopup" layout="block" rendered="{!displayPopUp}" >
+                {!$Label.lbl_mailing_note}<br/><br/><br/>
+
+                <apex:commandButton styleClass="popUpButton" value="{!$Label.lbl_ok}" action="{!closePopup}"  rerender="sendLaterPopUp"/>
+
+            </apex:outputPanel>
+        </apex:outputPanel>
+    </apex:form>
+    <style type="text/css">
+        .custPopup{
+            background-color: white;
+            border-width: 2px;
+            border-style: solid;
+            z-index: 9999;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            /* These are the 3 css properties you will need to change so the popup 
+            displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can add 
+            the height property for a fixed size pop up if you want.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .popupBackground{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute; 
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+        .popUpButton{
+            display: block;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+    </style>
+</apex:page>

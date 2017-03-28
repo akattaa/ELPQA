@@ -1,0 +1,40 @@
+<apex:page controller="silverpop.MailingTemplateSyncController" tabStyle="Sync_Silverpop_Templates__tab">
+    <apex:includeScript value="{!$Resource.silverpop__EngageJS}"/>
+    <script type='text/javascript'>
+        //preserve any existing onload functions
+        var previousOnload = window.onload;    
+        //append new functions to existing onload functions    
+        window.onload = function() { 
+            if (previousOnload) { 
+                previousOnload();
+            }
+            //Pass the SFDC Soap API URL to the controller
+            setSfdcApiServerUrl();
+        }
+
+        function showElement(element) {
+            document.getElementById(element).style.display="block";
+        }
+        
+        function hideElement(element) {
+            document.getElementById(element).style.display="none";
+        }
+    </script>
+    <apex:pageBlock title="{!$Label.lbl_sync_templates}" id="mainContainer">
+        <apex:form >
+            <apex:commandButton action="{!syncSilverpopTemplates}" value="{!$Label.lbl_sync_templates}" 
+                    id="refreshButton" rerender="mainContainer" 
+                    onclick="showElement('{!$Component.loadingImg}'); hideElement('{!$Component.syncStatus}');" />
+        </apex:form>
+        <apex:image id="loadingImg" value="{!$Resource.silverpop__LoadingImg}" width="220" 
+                height="19" style="display: none; margin: 5px 0 15px -4px;"/>
+        <p style='font-weight: bold;'>
+            <apex:outputText id="syncStatus" value="{!syncStatus}" />
+        </p>
+    </apex:pageBlock>
+    <apex:form >
+        <apex:actionFunction name="setSfdcApiServerUrl" id="setSfdcApiServerUrl" rerender="mainContainer">
+            <apex:param name="sfdcApiServerUrl" assignTo="{!sfdcApiServerUrl}" value="{!$Api.Partner_Server_URL_180}" />
+        </apex:actionFunction>
+    </apex:form>
+</apex:page>
